@@ -12,6 +12,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 const uploadFile = require("./../route/uploadFile");
+const seller = require("./../route/seller");
 
 app.set("trust proxy", 1);
 app.use("/uploads", express.static("uploads"));
@@ -52,6 +53,7 @@ app.use(morgan("tiny"));
 app.use(express.json());
 
 app.use("/upload", apiLimiterUpload, uploadFile);
+app.use("/api/v1/sellers", seller);
 
 app.all("*", function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
