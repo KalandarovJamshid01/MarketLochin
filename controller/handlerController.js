@@ -5,7 +5,6 @@ const responseFunction = (req, res, statusCode, data, count) => {
   let page = req?.query?.page || 1;
   let limit = req?.query?.limit || 10;
   let totalCount = count || null;
-  console.log(totalCount);
   const pageCount = Math.ceil(totalCount / limit);
 
   if (Array.isArray(data)) {
