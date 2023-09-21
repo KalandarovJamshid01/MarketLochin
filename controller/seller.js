@@ -16,10 +16,10 @@ const {
 const getAllSellers = getAll(sellers);
 
 const bcryptFunc = (req, res, next) => {
-  if (req.body.password) {
+  if (req.body.sellerPassword) {
     var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(req.body.password, salt);
-    req.body.password = hash;
+    var hash = bcrypt.hashSync(req.body.sellerPassword, salt);
+    req.body.sellerPassword = hash;
   }
   next();
 };

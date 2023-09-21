@@ -55,7 +55,7 @@ const queryFunction = (req) => {
     paramQuerySQL.limit = limit;
     paramQuerySQL.offset = offset;
   }
-
+  console.log(paramQuerySQL);
   return paramQuerySQL;
 };
 

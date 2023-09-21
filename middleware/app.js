@@ -13,6 +13,7 @@ const cookieParser = require("cookie-parser");
 
 const uploadFile = require("./../route/uploadFile");
 const seller = require("./../route/seller");
+const auth = require("./../route/auth");
 
 app.set("trust proxy", 1);
 app.use("/uploads", express.static("uploads"));
@@ -54,7 +55,7 @@ app.use(express.json());
 
 app.use("/upload", apiLimiterUpload, uploadFile);
 app.use("/api/v1/sellers", seller);
-
+app.use("/api/v1/auth", auth);
 app.all("*", function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
 });
