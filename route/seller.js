@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const { updateOne } = require("../controller/handlerController");
+const { role, protect } = require("../controller/verify");
 const {
   getAllSellers,
   addSeller,
@@ -9,10 +10,27 @@ const {
   deletOneSeller,
 } = require("./../controller/seller");
 
-router.route("/").get(getAllSellers).post(bcryptFunc, addSeller);
+router
+  .route("/")
+  .get(protect, role(["admin", "seller"]), getAllSellers)
+  .post(
+    // protect,role,
+    bcryptFunc,
+    addSeller
+  );
 router
   .route("/:id")
-  .get(getOneSeller)
-  .patch(bcryptFunc, updateOneSeller)
-  .delete(deletOneSeller);
+  .get(
+    // protect,role,
+    getOneSeller
+  )
+  .patch(
+    // protect,role,
+    bcryptFunc,
+    updateOneSeller
+  )
+  .delete(
+    // protect,role,
+    deletOneSeller
+  );
 module.exports = router;

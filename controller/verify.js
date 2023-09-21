@@ -1,8 +1,8 @@
-const AppError = require("../utility/appError");
-const catchErrorAsync = require("../utility/catchError");
+const AppError = require("../util/appError");
+const catchErrorAsync = require("../util/catchError");
 const jwt = require("jsonwebtoken");
-const db = require("./../models/index");
-const User = db.users;
+const db = require("./../model/index");
+const sellers = db.sellers;
 const protect = catchErrorAsync(async (req, res, next) => {
   let token;
   if (
@@ -21,22 +21,23 @@ const protect = catchErrorAsync(async (req, res, next) => {
       return next(new AppError("Token is invallid", 403));
     }
 
-    const userData = await User.findOne({
+    const seller = await sellers.findOne({
       where: {
-        pin: user.pin,
+        id: user.id,
       },
     });
-    if (!userData) {
+    if (!seller) {
       return next(new AppError("You are not register", 401));
     }
 
-    req.user = userData.dataValues;
+    req.user = seller.dataValues;
     next();
   });
 });
+
 const role = (roles) => {
   return catchErrorAsync(async (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    if (!roles.includes(req.user.sellerRole)) {
       return next(
         new AppError("Siz bu amaliyotni bajarish huquqiga ega emassiz!", 401)
       );
