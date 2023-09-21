@@ -1,19 +1,19 @@
 module.exports = (sequelize, DataTypes) => {
   const sellers = sequelize.define("sellers", {
-    fullName: {
+    sellerName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    password: {
+    sellerPassword: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    phone: {
+    sellerPhone: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },
-    role: {
+    sellerRole: {
       type: DataTypes.ENUM("admin", "seller"),
       defaultValue: "seller",
     },

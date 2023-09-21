@@ -1,28 +1,28 @@
 module.exports = (sequelize, DataTypes) => {
   const products = sequelize.define("products", {
-    name: {
+    productName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    model: {
+    productModel: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    price: {
+    productPrice: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
-    quantity: {
+    productQuantity: {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
-    option: {
+    productOption: {
       type: DataTypes.STRING,
     },
-    imgUrl: {
+    productImgUrl: {
       type: DataTypes.STRING,
     },
-    measure: {
+    productMeasure: {
       type: DataTypes.ENUM("kg", "litr", "dona"),
     },
   });
