@@ -65,39 +65,38 @@ db.products.belongsTo(db.stores, {
   },
 });
 
-db.sales.belongTo(db.stores, {
+db.sales.belongsTo(db.stores, {
   foreignKey: {
     name: "storeId",
     allowNull: false,
   },
 });
 
-db.sales.belongTo(db.sellers, {
+db.sales.belongsTo(db.sellers, {
   foreignKey: {
     name: "sellerId",
     allowNull: false,
   },
 });
-db.sales.belongTo(db.clients, {
+db.sales.belongsTo(db.clients, {
   foreignKey: {
     name: "clientId",
     allowNull: true,
   },
 });
-db.soldproducts.belongTo(db.products, {
+db.soldproducts.belongsTo(db.products, {
   foreignKey: {
     name: "productId",
     allowNull: false,
   },
 });
 
-db.soldproducts.belongTo(db.sales, {
+db.soldproducts.belongsTo(db.sales, {
   foreignKey: {
     name: "saleId",
     allowNull: false,
   },
 });
-
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("yes re-sync done!");
