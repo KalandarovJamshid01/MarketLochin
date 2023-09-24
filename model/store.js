@@ -5,6 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
+    storeImgUrl: {
+      type: DataTypes.STRING,
+    },
   });
   return stores;
 };

@@ -15,6 +15,8 @@ const adresses = require("./adress");
 const payments = require("./payment");
 const sales = require("./sales");
 const soldproducts = require("./soldProduct");
+const clients = require("./client");
+
 sequelize
   .authenticate()
   .then(() => {
@@ -35,13 +37,67 @@ db.sales = sales(sequelize, DataTypes);
 db.products = products(sequelize, DataTypes);
 db.soldproducts = soldproducts(sequelize, DataTypes);
 db.payments = payments(sequelize, DataTypes);
-
+db.clients = clients(sequelize, DataTypes);
 db.products.belongsTo(db.stores, {
   foreignKey: {
     name: "storeId",
     allowNull: false,
   },
 });
+
+db.payments.belongsTo(db.sales, {
+  foreignKey: {
+    name: "saleId",
+    allowNull: false,
+  },
+});
+
+db.products.belongsTo(db.adresses, {
+  foreignKey: {
+    name: "adressId",
+    allowNull: false,
+  },
+});
+db.products.belongsTo(db.stores, {
+  foreignKey: {
+    name: "storeId",
+    allowNull: false,
+  },
+});
+
+db.sales.belongTo(db.stores, {
+  foreignKey: {
+    name: "storeId",
+    allowNull: false,
+  },
+});
+
+db.sales.belongTo(db.sellers, {
+  foreignKey: {
+    name: "sellerId",
+    allowNull: false,
+  },
+});
+db.sales.belongTo(db.clients, {
+  foreignKey: {
+    name: "clientId",
+    allowNull: true,
+  },
+});
+db.soldproducts.belongTo(db.products, {
+  foreignKey: {
+    name: "productId",
+    allowNull: false,
+  },
+});
+
+db.soldproducts.belongTo(db.sales, {
+  foreignKey: {
+    name: "saleId",
+    allowNull: false,
+  },
+});
+
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("yes re-sync done!");

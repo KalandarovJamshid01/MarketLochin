@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("admin", "seller"),
       defaultValue: "seller",
     },
+    sellerImgUrl: {
+      type: DataTypes.STRING,
+    },
   });
   return sellers;
 };

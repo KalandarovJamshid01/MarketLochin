@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    comment: {
+      type: DataTypes.STRING,
+    },
   });
   return sales;
 };
