@@ -1,5 +1,9 @@
+const { or } = require("sequelize");
 const AppError = require("../util/appError");
 const catchErrorAsync = require("../util/catchError");
+const db = require("./../model/index");
+const Sequelize = db.Sequelize;
+const Op = Sequelize.Op;
 
 const responseFunction = (req, res, statusCode, data, count) => {
   let page = req?.query?.page || 1;
@@ -55,7 +59,7 @@ const queryFunction = (req) => {
     paramQuerySQL.limit = limit;
     paramQuerySQL.offset = offset;
   }
-  console.log(paramQuerySQL);
+
   return paramQuerySQL;
 };
 
@@ -152,22 +156,54 @@ const getByUserId = (Model, options, options2) => {
   });
 };
 
-const getAll = (Model, options) => {
+const getAll = (Model, options, searchField1, searchField2) => {
   return catchErrorAsync(async (req, res, next) => {
     let datas;
     const query = queryFunction(req);
+
+    const searchOption = {
+      where: {
+        [Op.or]: [
+          { [searchField1]: { [Op.like]: "%" + req.query.search + "%" } },
+          { [searchField2]: { [Op.like]: "%" + req.query.search + "%" } },
+        ],
+      },
+    };
+    // const searchOption = {
+    //   where: {
+    //     [searchField1]: { [Op.like]: "%" + req.query.search + "%" },
+    //   },
+    // };
     let count;
     if (options) {
-      datas = await Model.findAll({
-        include: options,
-        ...query,
-      });
-      count = await Model.findAll({
-        include: options,
-      });
+      if (req.query.search) {
+        datas = await Model.findAll({
+          ...searchOption,
+          include: options,
+          ...query,
+        });
+        count = await Model.findAll({
+          ...searchOption,
+          include: options,
+        });
+      } else {
+        datas = await Model.findAll({
+          include: options,
+          ...query,
+        });
+        count = await Model.findAll({ include: options });
+      }
     } else {
-      datas = await Model.findAll(query);
-      count = await Model.count();
+      if (req.query.search) {
+        datas = await Model.findAll({
+          ...searchOption,
+          ...query,
+        });
+        count = await Model.count(searchOption);
+      } else {
+        datas = await Model.findAll(query);
+        count = await Model.count();
+      }
     }
     responseFunction(req, res, 200, datas, count);
   });

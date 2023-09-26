@@ -1,7 +1,8 @@
-const db = require("./../model/index");
 const parceUrl = require("parse-url");
 const excelToJson = require("convert-excel-to-json");
-
+const db = require("./../model/index");
+const Sequelize = db.Sequelize;
+const Op = Sequelize.Op;
 const products = db.products;
 const {
   getAll,
@@ -15,7 +16,15 @@ const catchErrorAsync = require("../util/catchError");
 const AppError = require("../util/appError");
 
 const addOneProduct = addOne(products);
-const getAllProducts = getAll(products);
+let getAllProducts = getAll(products, null, "productModel", "productName");
+// let getAllProducts = catchErrorAsync(async (req, res, next) => {
+//   const data = await products.findAll({
+//     where: {
+//       productName: { [Op.like]: "%" + req.query.search + "%" },
+//     },
+//   });
+//   res.status(200).json(data);
+// });
 const getOneProduct = getOne(products);
 const updateProduct = updateOne(products);
 const deleteProduct = deleteOne(products);
