@@ -15,6 +15,7 @@ const uploadFile = require("./../route/uploadFile");
 const seller = require("./../route/seller");
 const auth = require("./../route/auth");
 const store = require("../route/store");
+const product = require("./../route/product");
 
 app.set("trust proxy", 1);
 app.use("/uploads", express.static("uploads"));
@@ -58,6 +59,7 @@ app.use("/upload", apiLimiterUpload, uploadFile);
 app.use("/api/v1/sellers", seller);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/stores", store);
+app.use("/api/v1/products", product);
 
 app.all("*", function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
