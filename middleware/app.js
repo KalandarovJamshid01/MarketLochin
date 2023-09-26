@@ -56,7 +56,7 @@ app.use(hpp());
 app.use(morgan("tiny"));
 app.use(express.json());
 
-app.use("/upload", apiLimiterUpload, uploadFile);
+app.use("/api/v1/upload", apiLimiterUpload, uploadFile);
 app.use("/api/v1/sellers", seller);
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/stores", store);

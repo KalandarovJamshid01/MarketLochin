@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     productModel: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     productPrice: {
       type: DataTypes.BIGINT,
