@@ -17,14 +17,6 @@ const AppError = require("../util/appError");
 
 const addOneProduct = addOne(products);
 let getAllProducts = getAll(products, null, "productModel", "productName");
-// let getAllProducts = catchErrorAsync(async (req, res, next) => {
-//   const data = await products.findAll({
-//     where: {
-//       productName: { [Op.like]: "%" + req.query.search + "%" },
-//     },
-//   });
-//   res.status(200).json(data);
-// });
 const getOneProduct = getOne(products);
 const updateProduct = updateOne(products);
 const deleteProduct = deleteOne(products);
