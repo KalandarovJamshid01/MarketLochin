@@ -13,7 +13,7 @@ const stores = require("./store");
 const products = require("./product");
 const adresses = require("./adress");
 const payments = require("./payment");
-const sales = require("./sales");
+const sales = require("./sale");
 const soldproducts = require("./soldProduct");
 const clients = require("./client");
 
@@ -48,7 +48,11 @@ db.products.belongsTo(db.stores, {
 db.payments.belongsTo(db.sales, {
   foreignKey: {
     name: "saleId",
-    allowNull: false,
+  },
+});
+db.payments.belongsTo(db.clients, {
+  foreignKey: {
+    name: "clientId",
   },
 });
 

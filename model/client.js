@@ -7,12 +7,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     clientPhone: {
-      type: DataTypes.STRING,
-    },
-    clientPhone: {
-      type: DataTypes.STRING,
+      type: DataTypes.BIGINT,
     },
     clientDebtAmount: {
+      type: DataTypes.BIGINT,
+    },
+    clientPaidMoney: {
       type: DataTypes.BIGINT,
     },
     clientPaymentDate: {

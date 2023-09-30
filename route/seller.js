@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const { updateOne } = require("../controller/handlerController");
 const { role, protect } = require("../controller/verify");
 const {
   getAllSellers,
@@ -12,7 +11,9 @@ const {
 
 router
   .route("/")
-  .get(protect, role(["admin", "seller"]), getAllSellers)
+  .get(
+    // protect, role(["admin", "seller"]),
+    getAllSellers)
   .post(
     // protect,role,
     bcryptFunc,
