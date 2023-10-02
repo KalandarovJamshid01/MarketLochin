@@ -22,7 +22,7 @@ const responseFunction = (req, res, statusCode, data, count) => {
     });
   } else {
     res.status(statusCode).json({
-      status: "Success",
+      status: "Success",   
       data: data,
     });
   }
