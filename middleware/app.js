@@ -18,6 +18,7 @@ const store = require("../route/store");
 const product = require("./../route/product");
 const adress = require("../route/adress");
 const sale = require("./../route/sale");
+const client = require("./../route/client");
 
 app.set("trust proxy", 1);
 app.use("/uploads", express.static("uploads"));
@@ -66,6 +67,7 @@ app.use("/api/v1/stores", store);
 app.use("/api/v1/products", product);
 app.use("/api/v1/adresses", adress);
 app.use("/api/v1/sales", sale);
+app.use("/api/v1/clients", client);
 app.all("*", function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
 });

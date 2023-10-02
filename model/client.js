@@ -9,15 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     clientPhone: {
       type: DataTypes.BIGINT,
     },
-    clientDebtAmount: {
-      type: DataTypes.BIGINT,
-    },
-    clientPaidMoney: {
-      type: DataTypes.BIGINT,
-    },
     clientPaymentDate: {
       type: DataTypes.DATE,
     },
   });
   return clients;
 };
+

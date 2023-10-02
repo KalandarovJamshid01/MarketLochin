@@ -158,6 +158,7 @@ const getByUserId = (Model, options, options2) => {
 
 const getAll = (Model, options, searchField1, searchField2) => {
   return catchErrorAsync(async (req, res, next) => {
+    console.log(req.query)
     let datas;
     const query = queryFunction(req);
 
