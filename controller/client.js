@@ -9,9 +9,21 @@ const {
   responseFunction,
 } = require("./handlerController");
 
+const options = [
+  {
+    model: db.sales,
+  },
+  {
+    model: db.debts,
+  },
+  {
+    model: db.payments,
+  },
+];
+
 const addOneClient = addOne(clients);
 const getAllClients = getAll(clients, null, "clientPhone", "clientName");
-const getOneClient = getOne(clients);
+const getOneClient = getOne(clients, options);
 const updateOneClient = updateOne(clients);
 const deleteOneClient = deleteOne(clients);
 

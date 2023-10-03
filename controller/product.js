@@ -15,9 +15,27 @@ const {
 const catchErrorAsync = require("../util/catchError");
 const AppError = require("../util/appError");
 
+const options = [
+  {
+    model: db.adresses,
+  },
+  {
+    model: db.stores,
+  },
+];
 const addOneProduct = addOne(products);
 let getAllProducts = getAll(products, null, "productModel", "productName");
-const getOneProduct = getOne(products);
+//   const products = await db.products.findAll({
+//     where: {
+//       [Op.or]: [
+//         { productModel: { [Op.like]: "%" + req.query.search + "%" } },
+//         { productName: { [Op.like]: "%" + req.query.search + "%" } },
+//       ],
+//     },
+//   });
+//   responseFunction(req, res, 200, products, 1);
+// });
+const getOneProduct = getOne(products, options);
 const updateProduct = updateOne(products);
 const deleteProduct = deleteOne(products);
 const addProductByFile = catchErrorAsync(async (req, res, next) => {

@@ -15,6 +15,18 @@ const {
   responseFunction,
 } = require("./handlerController");
 
+const options = [
+  {
+    model: db.sellers,
+  },
+  {
+    model: db.stores,
+  },
+  {
+    model: db.clients,
+  },
+];
+
 const addOneSale = catchErrorAsync(async (req, res, next) => {
   const sale = await sales.create({
     storeId: req.body.storeId,
@@ -60,11 +72,14 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
 });
 
 const getAllSales = getAll(sales);
-const getOneSale = getOne(sales);
+const getOneSale = catchErrorAsync(async (req, res, next) => {
+  const sale = await sales.findOne({
+    where: { id: req.params.id },
+    
+  });
+});
 const updateSale = updateOne(sales);
 const deleteSale = deleteOne(sales);
-
-
 
 module.exports = {
   addOneSale,

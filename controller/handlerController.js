@@ -187,6 +187,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (req.query.filter) {
       filterOption = JSON.parse(req.query.filter);
     }
+   
     const query = {
       where: {
         ...searchOption,
@@ -197,6 +198,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (options) {
       query.include = options;
     }
+
     const data = await Model.findAll({
       ...query,
       ...queryPage,

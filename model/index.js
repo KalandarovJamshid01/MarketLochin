@@ -115,6 +115,10 @@ db.debts.belongsTo(db.clients, {
     allowNull: false,
   },
 });
+db.debts.belongsTo(db.stores, {
+  foreignKey: "storeId",
+  allowNull: false,
+});
 
 db.sequelize.sync({ force: false }).then(() => {
   console.log("yes re-sync done!");
