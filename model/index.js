@@ -16,7 +16,7 @@ const payments = require("./payment");
 const sales = require("./sale");
 const soldproducts = require("./soldProduct");
 const clients = require("./client");
-
+const debts = require("./debt");
 sequelize
   .authenticate()
   .then(() => {
@@ -38,6 +38,7 @@ db.products = products(sequelize, DataTypes);
 db.soldproducts = soldproducts(sequelize, DataTypes);
 db.payments = payments(sequelize, DataTypes);
 db.clients = clients(sequelize, DataTypes);
+db.debts = debts(sequelize, DataTypes);
 db.products.belongsTo(db.stores, {
   foreignKey: {
     name: "storeId",
@@ -98,6 +99,19 @@ db.soldproducts.belongsTo(db.products, {
 db.soldproducts.belongsTo(db.sales, {
   foreignKey: {
     name: "saleId",
+    allowNull: false,
+  },
+});
+
+db.debts.belongsTo(db.sales, {
+  foreignKey: {
+    name: "saleId",
+  },
+});
+
+db.debts.belongsTo(db.clients, {
+  foreignKey: {
+    name: "clientId",
     allowNull: false,
   },
 });
