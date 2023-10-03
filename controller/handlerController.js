@@ -166,6 +166,16 @@ const getAll = (Model, options, searchField1, searchField2) => {
     const queryPage = queryFunction(req);
     let searchOption = {};
     let filterOption = {};
+    let betweenOption = {};
+    if (req.query.between) {
+      req.query.between = JSON.parse(req.query.between);
+      betweenOption = {
+        [Object.keys(req.query.between)[0]]: {
+          [Op.between]: req.query.between[[Object.keys(req.query.between)[0]]],
+        },
+      };
+    }
+
     if (req.query.search) {
       searchOption = {
         [Op.or]: [
@@ -181,6 +191,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
       where: {
         ...searchOption,
         ...filterOption,
+        ...betweenOption,
       },
     };
     if (options) {

@@ -3,7 +3,6 @@ const payments = db.payments;
 const {
   getAll,
   getOne,
-  addOne,
   addAll,
   updateOne,
   deleteOne,
