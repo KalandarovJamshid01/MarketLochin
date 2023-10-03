@@ -23,6 +23,11 @@ const bcryptFunc = (req, res, next) => {
   }
   next();
 };
+
+const sellerMe = (req, res, next) => {
+  responseFunction(req, res, 200, req.user, 1);
+};
+
 const addSeller = addOne(sellers);
 const getOneSeller = getOne(sellers);
 const updateOneSeller = updateOne(sellers);
@@ -34,4 +39,5 @@ module.exports = {
   getOneSeller,
   updateOneSeller,
   deletOneSeller,
+  sellerMe,
 };

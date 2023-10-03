@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const db = require("./../model/index");
 const sellers = db.sellers;
 const protect = catchErrorAsync(async (req, res, next) => {
-  let token;
+  let token = null;
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")

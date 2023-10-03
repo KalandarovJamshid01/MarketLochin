@@ -105,18 +105,17 @@ const updateOne = (Model) => {
 const getOne = (Model, options) => {
   return catchErrorAsync(async (req, res, next) => {
     let data;
-
     if (options) {
       data = await Model.findOne({
         where: {
-          // id: req.params.id,
+          id: req.params.id,
         },
         include: options,
       });
     } else {
       data = await Model.findOne({
         where: {
-          // id: req.params.id,
+          id: req.params.id,
         },
       });
     }
@@ -131,7 +130,6 @@ const getByUserId = (Model, options, options2) => {
   return catchErrorAsync(async (req, res, next) => {
     let datas;
     const query = queryFunction(req);
-
     if (options2) {
       datas = await Model.findAll({
         where: { user_id: req.params.user_id },
@@ -160,7 +158,6 @@ const getByUserId = (Model, options, options2) => {
 const getAll = (Model, options, searchField1, searchField2) => {
   return catchErrorAsync(async (req, res, next) => {
     const queryPage = queryFunction(req);
-
     let searchOption = {};
     let filterOption = {};
     if (req.query.search) {
@@ -171,11 +168,9 @@ const getAll = (Model, options, searchField1, searchField2) => {
         ],
       };
     }
-
     if (req.query.filter) {
       filterOption = JSON.parse(req.query.filter);
     }
-
     const query = {
       where: {
         ...searchOption,
@@ -185,8 +180,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (options) {
       query.include = options;
     }
-
-   const data = await Model.findAll({
+    const data = await Model.findAll({
       ...query,
       ...queryPage,
     });

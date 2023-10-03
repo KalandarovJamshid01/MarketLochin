@@ -7,18 +7,22 @@ const {
   getOneSeller,
   updateOneSeller,
   deletOneSeller,
+  sellerMe,
 } = require("./../controller/seller");
 
 router
   .route("/")
   .get(
     // protect, role(["admin", "seller"]),
-    getAllSellers)
+    getAllSellers
+  )
   .post(
     // protect,role,
     bcryptFunc,
     addSeller
   );
+
+router.route("/me").get(protect, sellerMe);
 router
   .route("/:id")
   .get(
@@ -34,4 +38,5 @@ router
     // protect,role,
     deletOneSeller
   );
+
 module.exports = router;
