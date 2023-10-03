@@ -16,24 +16,13 @@ const {
 } = require("./handlerController");
 
 const addOneSale = catchErrorAsync(async (req, res, next) => {
-  let client = req.body.client;
-  if (client) {
-    client = await clients.create({
-      clientName: client.clientName,
-      clientAdress: client.clientAdress,
-      clientPhone: client.clientPhone,
-      clientDebtAmount: client.clientDebtAmount,
-      clientPaidMoney: client.clientPaidMoney,
-      clientPaymentDate: client.clientPaymentDate,
-    });
-  }
   const sale = await sales.create({
     storeId: req.body.storeId,
     saleMainPrice: req.body.saleMainPrice,
     saleSoldPrice: req.body.saleSoldPrice,
     sellerId: req.body.sellerId,
     saleDebt: req.body.saleDebt,
-    clientId: client?.id || null,
+    clientId: req.body?.clientId || null,
     comment: req.body?.comment || null,
   });
   req.body.payments.map(async (item) => {
@@ -41,7 +30,6 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       paymentAmount: item.paymentAmount,
       paymentType: item.paymentType,
       saleId: sale.id,
-      clientId: client.id,
     });
   });
   req.body.soldProducts.map(async (item) => {

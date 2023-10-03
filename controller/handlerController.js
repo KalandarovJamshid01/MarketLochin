@@ -68,11 +68,19 @@ const addOne = (Model, func, options) => {
     if (func) {
       func(req, res, next);
     }
-    // deleteRedisKey(req);
     responseFunction(req, res, 201, data);
   });
 };
 
+const addAll = (Model, func, options) => {
+  return catchErrorAsync(async (req, res, next) => {
+    let data = await Model.bulkCreate(req.body);
+    if (func) {
+      func(req, res, next);
+    }
+    responseFunction(req, res, 201, data);
+  });
+};
 const deleteOne = (Model) => {
   return catchErrorAsync(async (req, res, next) => {
     const data = await Model.destroy({ where: { id: req.params.id } });
@@ -119,9 +127,7 @@ const getOne = (Model, options) => {
         },
       });
     }
-    if (!data) {
-      return next(new AppError("Not found this ID", 404));
-    }
+
     responseFunction(req, res, 200, data);
   });
 };
@@ -193,6 +199,7 @@ module.exports = {
   deleteOne,
   updateOne,
   addOne,
+  addAll,
   getOne,
   getAll,
   responseFunction,
