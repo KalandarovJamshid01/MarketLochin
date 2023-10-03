@@ -1,4 +1,3 @@
-const { or } = require("sequelize");
 const AppError = require("../util/appError");
 const catchErrorAsync = require("../util/catchError");
 const db = require("./../model/index");
@@ -22,7 +21,7 @@ const responseFunction = (req, res, statusCode, data, count) => {
     });
   } else {
     res.status(statusCode).json({
-      status: "Success",   
+      status: "Success",
       data: data,
     });
   }
@@ -110,14 +109,14 @@ const getOne = (Model, options) => {
     if (options) {
       data = await Model.findOne({
         where: {
-          id: req.params.id,
+          // id: req.params.id,
         },
         include: options,
       });
     } else {
       data = await Model.findOne({
         where: {
-          id: req.params.id,
+          // id: req.params.id,
         },
       });
     }
@@ -147,7 +146,9 @@ const getByUserId = (Model, options, options2) => {
       });
     } else {
       datas = await Model.findAll({
-        where: { user_id: req.params.user_id },
+        where: {
+          user_id: req.params.user_id,
+        },
 
         ...query,
       });
@@ -158,55 +159,39 @@ const getByUserId = (Model, options, options2) => {
 
 const getAll = (Model, options, searchField1, searchField2) => {
   return catchErrorAsync(async (req, res, next) => {
-    console.log(req.query)
-    let datas;
-    const query = queryFunction(req);
+    const queryPage = queryFunction(req);
 
-    const searchOption = {
-      where: {
+    let searchOption = {};
+    let filterOption = {};
+    if (req.query.search) {
+      searchOption = {
         [Op.or]: [
           { [searchField1]: { [Op.like]: "%" + req.query.search + "%" } },
           { [searchField2]: { [Op.like]: "%" + req.query.search + "%" } },
         ],
+      };
+    }
+
+    if (req.query.filter) {
+      filterOption = JSON.parse(req.query.filter);
+    }
+
+    const query = {
+      where: {
+        ...searchOption,
+        ...filterOption,
       },
     };
-    // const searchOption = {
-    //   where: {
-    //     [searchField1]: { [Op.like]: "%" + req.query.search + "%" },
-    //   },
-    // };
-    let count;
     if (options) {
-      if (req.query.search) {
-        datas = await Model.findAll({
-          ...searchOption,
-          include: options,
-          ...query,
-        });
-        count = await Model.findAll({
-          ...searchOption,
-          include: options,
-        });
-      } else {
-        datas = await Model.findAll({
-          include: options,
-          ...query,
-        });
-        count = await Model.findAll({ include: options });
-      }
-    } else {
-      if (req.query.search) {
-        datas = await Model.findAll({
-          ...searchOption,
-          ...query,
-        });
-        count = await Model.count(searchOption);
-      } else {
-        datas = await Model.findAll(query);
-        count = await Model.count();
-      }
+      query.include = options;
     }
-    responseFunction(req, res, 200, datas, count);
+
+   const data = await Model.findAll({
+      ...query,
+      ...queryPage,
+    });
+    const count = await Model.count(query);
+    responseFunction(req, res, 200, data, count);
   });
 };
 

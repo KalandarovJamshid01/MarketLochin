@@ -10,7 +10,7 @@ const {
 } = require("./handlerController");
 
 const addOneClient = addOne(clients);
-const getAllClients = getAll(clients);
+const getAllClients = getAll(clients, null, "clientPhone", "clientName");
 const getOneClient = getOne(clients);
 const updateOneClient = updateOne(clients);
 const deleteOneClient = deleteOne(clients);
