@@ -13,7 +13,7 @@ const {
   responseFunction,
 } = require("./handlerController");
 
-const getAllSellers = getAll(sellers);
+const getAllSellers = getAll(sellers, null, "sellerName", "sellerPhone");
 
 const bcryptFunc = (req, res, next) => {
   if (req.body.sellerPassword) {

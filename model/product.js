@@ -16,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     productQuantity: {
       type: DataTypes.BIGINT,
       allowNull: false,
+      defaultValue: 0,
     },
     productOption: {
       type: DataTypes.STRING,
@@ -24,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     productMeasure: {
-      type: DataTypes.ENUM("kg", "litr", "dona"),
+      type: DataTypes.ENUM("kg", "litr", "dona","metr","metrkv"),
     },
   });
   return products;
