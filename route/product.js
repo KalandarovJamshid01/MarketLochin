@@ -6,10 +6,12 @@ const {
   updateProduct,
   deleteProduct,
   addProductByFile,
+  getProductFile,
 } = require("./../controller/product");
 
 router.route("/").get(getAllProducts).post(addOneProduct);
-router.route("/file").post(addProductByFile);
+router.route("/file/:adressId").post(addProductByFile).get(getProductFile);
+
 router
   .route("/:id")
   .get(getOneProduct)

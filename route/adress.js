@@ -5,6 +5,7 @@ const {
   getOneAdress,
   updateAdress,
   deleteAdress,
+  
 } = require("./../controller/adress");
 
 router.route("/").get(getAllAdresses).post(addOneAdress);

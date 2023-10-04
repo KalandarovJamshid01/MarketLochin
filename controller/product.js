@@ -4,6 +4,10 @@ const db = require("./../model/index");
 const Sequelize = db.Sequelize;
 const Op = Sequelize.Op;
 const products = db.products;
+const sequelize = db.sequelize;
+const xlsx = require("json-as-xlsx");
+const { QueryTypes } = require("sequelize");
+
 const {
   getAll,
   getOne,
@@ -62,7 +66,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
         productQuantity: item?.D,
         productMeasure: item?.E,
         storeId: req.body.storeId,
-        adressId: req.body.adressId,
+        adressId: req.params.adressId,
       });
     } else {
       let productQuantity = item?.D + product?.productQuantity;
@@ -85,6 +89,53 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
   );
 });
 
+const getProductFile = catchErrorAsync(async (req, res, next) => {
+  const products = await sequelize.query(
+    `SELECT productName, productModel, productPrice, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=${req.params.adressId} ORDER BY products.productQuantity ASC`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
+  let data = [
+    {
+      sheet: "Check",
+      columns: [
+        { label: "Mahsulot nomi", value: (row) => row.productName }, // Top level data
+        { label: "Mahsulot modeli", value: (row) => row.productModel },
+        {
+          label: "Mahsulot narxi",
+          value: (row) => row.productPrice + " " + "so'm",
+        },
+        {
+          label: "Mahsulot miqdori",
+          value: (row) => row.productQuantity + " " + row.productMeasure,
+        },
+        { label: "Manzil", value: (row) => row.adressName }, // Custom format
+
+        // Run functions
+      ],
+      content: products,
+    },
+  ];
+
+  let settings = {
+    fileName: `${products[0]?.adressName} Product File`, // Name of the resulting spreadsheet
+    extraLength: 3, // A bigger number means that columns will be wider
+    writeMode: "write", // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
+    writeOptions: { type: "buffer", bookType: "xlsx" }, // Style options from https://docs.sheetjs.com/docs/api/write-options
+    RTL: true, // Display the columns from right-to-left (the default value is false)
+  };
+
+  const file = xlsx(data, settings);
+
+  res.statusCode = 200;
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=" ${products[0]?.adressName} Product File.xls"`
+  );
+  res.setHeader("Content-Type", "application/vnd.ms-excel");
+  res.end(file);
+});
 module.exports = {
   addOneProduct,
   getAllProducts,
@@ -92,4 +143,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   addProductByFile,
+  getProductFile,
 };
