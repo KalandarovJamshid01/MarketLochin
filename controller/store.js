@@ -11,7 +11,7 @@ const {
 } = require("./handlerController");
 
 const addOneStore = addOne(stores);
-const getAllStores = getAll(stores);
+const getAllStores = getAll(stores, null, "storeName", "storeId");
 const getOneStore = getOne(stores);
 const updateStore = updateOne(stores);
 const deleteStore = deleteOne(stores);

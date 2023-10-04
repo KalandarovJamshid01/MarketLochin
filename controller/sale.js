@@ -1,15 +1,14 @@
+const sale = require("../model/sale");
 const catchErrorAsync = require("../util/catchError");
 const db = require("./../model/index");
 
 const sales = db.sales;
-const clients = db.clients;
 const payments = db.payments;
 const soldProducts = db.soldproducts;
 const products = db.products;
 const {
   getAll,
   getOne,
-  addOne,
   deleteOne,
   updateOne,
   responseFunction,
@@ -24,6 +23,12 @@ const options = [
   },
   {
     model: db.clients,
+  },
+  {
+    model: db.soldproducts,
+  },
+  {
+    model: db.payments,
   },
 ];
 
@@ -56,6 +61,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       productId: item.productId,
       soldPrice: item.soldPrice,
       soldQuantity: item.soldQuantity,
+      soldProductName:item.soldProductName
     });
     await products.update(
       {
@@ -72,12 +78,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
 });
 
 const getAllSales = getAll(sales);
-const getOneSale = catchErrorAsync(async (req, res, next) => {
-  const sale = await sales.findOne({
-    where: { id: req.params.id },
-    
-  });
-});
+const getOneSale = getOne(sales, options, "saleId", "saleMainPrice");
 const updateSale = updateOne(sales);
 const deleteSale = deleteOne(sales);
 

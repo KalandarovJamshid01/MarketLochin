@@ -51,18 +51,33 @@ db.payments.belongsTo(db.sales, {
     name: "saleId",
   },
 });
-db.payments.belongsTo(db.clients, {
+
+
+db.clients.hasMany(db.payments, {
   foreignKey: {
     name: "clientId",
   },
 });
 
+db.clients.hasMany(db.sales, {
+  foreignKey: {
+    name: "clientId",
+  },
+});
+
+db.clients.hasMany(db.debts, {
+  foreignKey: {
+    name: "clientId",
+    allowNull: false,
+  },
+});
 db.products.belongsTo(db.adresses, {
   foreignKey: {
     name: "adressId",
     allowNull: false,
   },
 });
+
 db.products.belongsTo(db.stores, {
   foreignKey: {
     name: "storeId",
@@ -89,6 +104,25 @@ db.sales.belongsTo(db.clients, {
     allowNull: true,
   },
 });
+
+db.sales.hasMany(db.soldproducts, {
+  foreignKey: {
+    name: "saleId",
+    allowNull: false,
+  },
+});
+
+db.sales.hasMany(db.debts, {
+  foreignKey: {
+    name: "saleId",
+  },
+});
+db.sales.hasMany(db.payments, {
+  foreignKey: {
+    name: "saleId",
+  },
+});
+
 db.soldproducts.belongsTo(db.products, {
   foreignKey: {
     name: "productId",
@@ -96,25 +130,8 @@ db.soldproducts.belongsTo(db.products, {
   },
 });
 
-db.soldproducts.belongsTo(db.sales, {
-  foreignKey: {
-    name: "saleId",
-    allowNull: false,
-  },
-});
 
-db.debts.belongsTo(db.sales, {
-  foreignKey: {
-    name: "saleId",
-  },
-});
 
-db.debts.belongsTo(db.clients, {
-  foreignKey: {
-    name: "clientId",
-    allowNull: false,
-  },
-});
 db.debts.belongsTo(db.stores, {
   foreignKey: "storeId",
   allowNull: false,
