@@ -100,6 +100,7 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
   );
 
   soldProducts.map((item) => {
+    item.totalPrice = item.soldQuantity * item.soldPrice;
     item.client = `${sale[0]?.clientName || ""} ${sale[0]?.clientPhone || ""} ${
       sale[0]?.clientAdress || ""
     }`;
@@ -108,43 +109,42 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
 
   let data = [
     {
-      sheet: "Adults",
+      sheet: "Check",
       columns: [
-        { label: "User", value: "user" }, // Top level data
-        { label: "Age", value: (row) => row.age + " years" }, // Custom format
+        { label: "Mahsulot nomi", value: (row) => row.productName }, // Top level data
+        { label: "Mahsulot modeli", value: (row) => row.productModel }, // Custom format
         {
-          label: "Phone",
-          value: (row) => (row.more ? row.more.phone || "" : ""),
-        }, // Run functions
+          label: "Mahsulot hajmi",
+          value: (row) => row.soldQuantity + " " + row.productMeasure,
+        }, // Custom format
+        { label: "Mahsulot narxi", value: (row) => row.soldPrice }, // Custom format
+        { label: "Umumiy narx", value: (row) => row.totalPrice }, // Custom format
+        { label: "Xaridor ma'lumotlari", value: (row) => row.client }, // Custom format
+        { label: "Izoh", value: (row) => row.comment }, // Custom format
+
+        // Run functions
       ],
-      content: [
-        { user: "Andrea", age: 20, more: { phone: "11111111" } },
-        { user: "Luis", age: 21, more: { phone: "12345678" } },
-      ],
-    },
-    {
-      sheet: "Children",
-      columns: [
-        { label: "User", value: "user" }, // Top level data
-        { label: "Age", value: "age", format: '# "years"' }, // Column format
-        { label: "Phone", value: "more.phone", format: "(###) ###-####" }, // Deep props and column format
-      ],
-      content: [
-        { user: "Manuel", age: 16, more: { phone: 9999999900 } },
-        { user: "Ana", age: 17, more: { phone: 8765432135 } },
-      ],
+      content: soldProducts,
     },
   ];
 
   let settings = {
-    fileName: "MySpreadsheet", // Name of the resulting spreadsheet
+    fileName: "Check File", // Name of the resulting spreadsheet
     extraLength: 3, // A bigger number means that columns will be wider
     writeMode: "write", // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
     writeOptions: { type: "buffer", bookType: "xlsx" }, // Style options from https://docs.sheetjs.com/docs/api/write-options
     RTL: true, // Display the columns from right-to-left (the default value is false)
   };
 
-  responseFunction(req, res, 200, soldProducts, 1);
+  const file = xlsx(data, settings);
+
+  res.statusCode = 200;
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=" ${sale[0].clientName} Check File.xls"`
+  );
+  res.setHeader("Content-Type", "application/vnd.ms-excel");
+  res.end(file);
 });
 
 module.exports = {
