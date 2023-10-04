@@ -15,6 +15,7 @@ const getOnePayment = getOne(payments);
 const updateOnePayment = updateOne(payments);
 const deleteOnePayment = deleteOne(payments);
 
+  
 module.exports = {
   getAllPayments,
   addAllPayments,

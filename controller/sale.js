@@ -34,6 +34,18 @@ const options = [
   },
 ];
 
+const options2 = [
+  {
+    model: db.sellers,
+  },
+  {
+    model: db.stores,
+  },
+  {
+    model: db.soldproducts,
+  },
+];
+
 const addOneSale = catchErrorAsync(async (req, res, next) => {
   const sale = await sales.create({
     storeId: req.body.storeId,
@@ -80,8 +92,8 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
   responseFunction(req, res, 201, sale, 1);
 });
 
-const getAllSales = getAll(sales);
-const getOneSale = getOne(sales, options, "saleId", "saleMainPrice");
+const getAllSales = getAll(sales, options2, "saleId", "saleMainPrice");
+const getOneSale = getOne(sales, options);
 const updateSale = updateOne(sales);
 const deleteSale = deleteOne(sales);
 const checkFile = catchErrorAsync(async (req, res, next) => {

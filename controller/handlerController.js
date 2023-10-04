@@ -51,6 +51,9 @@ const queryFunction = (req) => {
     paramQuerySQL.offset = offset;
     if (limit !== "" && typeof limit !== "undefined") {
       paramQuerySQL.limit = limit * 1;
+    } else if (limit == "all") {
+      delete paramQuerySQL.limit;
+      delete paramQuerySQL.offset;
     }
   } else {
     limit = 10; // limit 5 item
@@ -187,7 +190,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (req.query.filter) {
       filterOption = JSON.parse(req.query.filter);
     }
-   
+
     const query = {
       where: {
         ...searchOption,

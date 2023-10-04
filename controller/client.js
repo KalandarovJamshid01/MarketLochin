@@ -9,6 +9,7 @@ const {
   responseFunction,
 } = require("./handlerController");
 
+
 const options = [
   {
     model: db.sales,
