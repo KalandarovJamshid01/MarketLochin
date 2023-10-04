@@ -5,9 +5,11 @@ const {
   addOneClient,
   updateOneClient,
   deleteOneClient,
+  getDebitorsFile,
 } = require("./../controller/client");
 
 router.route("/").get(getAllClients).post(addOneClient);
+router.route("/file").get(getDebitorsFile);
 router
   .route("/:id")
   .get(getOneClient)

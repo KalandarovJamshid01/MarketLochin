@@ -4,6 +4,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       allowNull: false,
     },
+    debtStatus: {
+      type: DataTypes.ENUM("active", "archive"),
+    },
   });
   return debts;
 };
