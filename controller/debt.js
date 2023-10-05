@@ -17,7 +17,7 @@ const addOneDebt = catchErrorAsync(async (req, res, next) => {
   const debt = await debts.create(req.body);
 
   const debtSum = await sequelize.query(
-    `SELECT SUM(debts.sum) as debtSum from debts where clientId=req.body.clientId group by clientId`,
+    `SELECT SUM(debts.debt) as debtSum from debts where clientId=${req.body.clientId} group by clientId`,
     {
       type: QueryTypes.SELECT,
     }
@@ -39,11 +39,9 @@ const addOneDebt = catchErrorAsync(async (req, res, next) => {
         },
       }
     );
-
-    responseFunction(req, res, 201, debt, 1);
   }
 
-  responseFunction;
+  responseFunction(req, res, 201, debt, 1);
 });
 const getAllDebts = getAll(debts);
 const getOneDebt = getOne(debts);
