@@ -6,7 +6,7 @@ const { QueryTypes } = require("sequelize");
 const sequelize = db.sequelize;
 const sales = db.sales;
 const payments = db.payments;
-const soldProducts = db.soldproducts;
+const soldproducts = db.soldproducts;
 const products = db.products;
 const {
   getAll,
@@ -56,7 +56,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
     clientId: req.body?.clientId || null,
     comment: req.body?.comment || null,
   });
-  req.body.payments.map(async (item) => {
+  req.body.payments?.map(async (item) => {
     await payments.create({
       paymentAmount: item.paymentAmount,
       paymentType: item.paymentType,
@@ -64,14 +64,14 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       clientId: req.body?.clientId,
     });
   });
-  req.body.soldProducts.map(async (item) => {
+  req.body.soldproducts?.map(async (item) => {
     const product = await products.findOne({
       where: {
         id: item.productId,
       },
     });
     const quantity = product.productQuantity - item.soldQuantity;
-    await soldProducts.create({
+    await soldproducts.create({
       saleId: sale.id,
       productId: item.productId,
       soldPrice: item.soldPrice,
@@ -97,8 +97,8 @@ const getOneSale = getOne(sales, options);
 const updateSale = updateOne(sales);
 const deleteSale = deleteOne(sales);
 const checkFile = catchErrorAsync(async (req, res, next) => {
-  const soldProducts = await sequelize.query(
-    `SELECT productName,productModel,soldPrice,soldQuantity,productMeasure from soldProducts left join products on soldProducts.productId=products.id where saleId=${req.params.id}`,
+  const soldproducts = await sequelize.query(
+    `SELECT productName,productModel,soldPrice,soldQuantity,productMeasure from soldproducts left join products on soldproducts.productId=products.id where saleId=${req.params.id}`,
     {
       type: QueryTypes.SELECT,
     }
@@ -111,7 +111,7 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
     }
   );
 
-  soldProducts.map((item) => {
+  soldproducts.map((item) => {
     item.totalPrice = item.soldQuantity * item.soldPrice;
     item.client = `${sale[0]?.clientName || ""} ${sale[0]?.clientPhone || ""} ${
       sale[0]?.clientAdress || ""
@@ -136,7 +136,7 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
 
         // Run functions
       ],
-      content: soldProducts,
+      content: soldproducts,
     },
   ];
 

@@ -52,7 +52,6 @@ db.payments.belongsTo(db.sales, {
   },
 });
 
-
 db.clients.hasMany(db.payments, {
   foreignKey: {
     name: "clientId",
@@ -129,8 +128,6 @@ db.soldproducts.belongsTo(db.products, {
     allowNull: false,
   },
 });
-
-
 
 db.debts.belongsTo(db.stores, {
   foreignKey: "storeId",
