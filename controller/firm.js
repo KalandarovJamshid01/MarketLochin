@@ -10,9 +10,15 @@ const {
   addOne,
 } = require("./handlerController");
 
+const options = [
+  {
+    model: db.currencies,
+  },
+];
+
 const addAllFirms = addOne(firms);
 const getAllFirms = getAll(firms, null, "firmName", "firmINN");
-const getOneFirm = getOne(firms);
+const getOneFirm = getOne(firms, options);
 const updateOneFirm = updateOne(firms);
 const deleteOneFirm = deleteOne(firms);
 
