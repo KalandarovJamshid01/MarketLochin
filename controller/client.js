@@ -32,44 +32,29 @@ const updateOneClient = updateOne(clients);
 const deleteOneClient = deleteOne(clients);
 const getDebitorsFile = catchErrorAsync(async (req, res, next) => {
   const debitors = await sequelize.query(
-    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate FROM clients ORDER BY clients.clientPaymentDate ASC`,
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum FROM clients left join debts on clients.id=debts.clientId group by clients.id ORDER BY clients.clientPaymentDate ASC`,
     {
       type: QueryTypes.SELECT,
     }
   );
-  let arr = [];
-  await Promise.all(
-    debitors.map(async (item) => {
-      const debtSum = await sequelize.query(
-        `SELECT SUM(debts.debt) as debtSum,clientId from debts where clientId=${item.id} group by clientId  `,
-        {
-          type: QueryTypes.SELECT,
-        }
-      );
-      item.debtSum = debtSum[0].debtSum * 1;
-      if (item.debtSum != 0) {
-        arr.push(item);
-      }
-    })
-  );
- 
+
   let data = [
     {
       sheet: "Debitors",
       columns: [
-        { label: "Qarzdor ismi", value: (row) => row.clientName }, // Top level data
-        { label: "Qarzdor telefoni", value: (row) => row.clientPhone },
+        { label: "Qarzdor ismi", value: (row) => row?.clientName }, // Top level data
+        { label: "Qarzdor telefoni", value: (row) => row?.clientPhone },
         {
           label: "Qarzdor manzili",
-          value: (row) => row.clientAdress,
+          value: (row) => row?.clientAdress,
         },
         {
           label: "Qarzdorning umumiy qarzi",
-          value: (row) => row.debtSum + " " + "so'm",
+          value: (row) => row?.debtSum + " " + "so'm",
         },
         {
           label: "Qarz qaytarish sanasi",
-          value: (row) => row.clientPaymentDate,
+          value: (row) => row?.clientPaymentDate,
         }, // Custom format
 
         // Run functions

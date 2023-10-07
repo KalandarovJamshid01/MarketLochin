@@ -6,9 +6,11 @@ const Op = Sequelize.Op;
 
 const responseFunction = (req, res, statusCode, data, count) => {
   let page = req?.query?.page || 1;
-  let limit = req?.query?.limit || 10;
-  let totalCount = count || null;
-  const pageCount = Math.ceil(totalCount / limit);
+  let limit = data.length;
+
+  let pageCount;
+
+  pageCount = Math.ceil(count / limit);
 
   if (Array.isArray(data)) {
     res.status(statusCode).json({
@@ -30,8 +32,8 @@ const responseFunction = (req, res, statusCode, data, count) => {
 const queryFunction = (req) => {
   let paramQuerySQL = {};
   let sort = req.query?.sort || "";
-  let page = req.query?.page || "";
-  let limit = req.query?.limit || 10;
+  let page = req.query?.page;
+  let limit = req.query?.limit;
   let offset;
 
   // sorting
@@ -46,22 +48,11 @@ const queryFunction = (req) => {
   }
 
   // pagination
-  if (page !== "" && typeof page !== "undefined") {
+  if (typeof page !== "undefined" && typeof limit !== "undefined") {
     offset = page * limit - limit;
     paramQuerySQL.offset = offset;
-    if (limit !== "" && typeof limit !== "undefined") {
-      paramQuerySQL.limit = limit * 1;
-    } else if (limit == "all") {
-      delete paramQuerySQL.limit;
-      delete paramQuerySQL.offset;
-    }
-  } else {
-    limit = 10; // limit 5 item
-    offset = 0;
     paramQuerySQL.limit = limit;
-    paramQuerySQL.offset = offset;
   }
-
   return paramQuerySQL;
 };
 
@@ -201,11 +192,11 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (options) {
       query.include = options;
     }
-
     const data = await Model.findAll({
       ...query,
       ...queryPage,
     });
+
     const count = await Model.count(query);
     responseFunction(req, res, 200, data, count);
   });
