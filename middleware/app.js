@@ -21,7 +21,8 @@ const sale = require("./../route/sale");
 const client = require("./../route/client");
 const payment = require("../route/payment");
 const debt = require("../route/debt");
-
+const firm = require("./../route/firm");
+const currency = require("./../route/currency");
 app.set("trust proxy", 1);
 app.use("/uploads", express.static("uploads"));
 app.use("/download", express.static("public"));
@@ -71,8 +72,9 @@ app.use("/api/v1/adresses", adress);
 app.use("/api/v1/sales", sale);
 app.use("/api/v1/clients", client);
 app.use("/api/v1/payments", payment);
-
 app.use("/api/v1/debts", debt);
+app.use("/api/v1/firms", firm);
+app.use("/api/v1/currencies", currency);
 app.all("*", function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
 });
