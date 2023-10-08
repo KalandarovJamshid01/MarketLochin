@@ -32,7 +32,7 @@ const responseFunction = (req, res, statusCode, data, count) => {
 const queryFunction = (req) => {
   let paramQuerySQL = {};
   let sort = req.query?.sort || "";
-  let page = req.query?.page || null;
+  let page = req.query?.page || 1;
   let limit = req.query?.limit || null;
   let offset;
 
@@ -48,7 +48,7 @@ const queryFunction = (req) => {
   }
 
   // pagination
-  if (page && limit) {
+  if (limit) {
     offset = page * limit - limit;
     paramQuerySQL.offset = offset;
     paramQuerySQL.limit = limit * 1;
@@ -204,7 +204,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
       count = await Model.count(query);
     } else {
       count = await Model.findAll(query);
-      count=count.length
+      count = count.length;
     }
     responseFunction(req, res, 200, data, count);
   });

@@ -8,6 +8,7 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   operatorsAliases: false,
 });
 
+
 const sellers = require("./seller");
 const stores = require("./store");
 const products = require("./product");

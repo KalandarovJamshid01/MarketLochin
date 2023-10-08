@@ -25,8 +25,18 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     productMeasure: {
-      type: DataTypes.ENUM("kg", "litr", "dona","metr","metrkv"),
+      type: DataTypes.ENUM("kg", "litr", "dona", "metr", "metrkv"),
     },
+  });
+  const queryInterface = sequelize.getQueryInterface();
+  queryInterface.addColumn("products", "productMainPrice", {
+    type: DataTypes.BIGINT,
+  });
+
+  queryInterface.changeColumn("products", "productQuantity", {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0,
   });
   return products;
 };
