@@ -193,13 +193,19 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (options) {
       query.include = options;
     }
-    console.log(queryPage);
+
     const data = await Model.findAll({
       ...query,
       ...queryPage,
     });
 
-    const count = await Model.count(query);
+    let count;
+    if (!options) {
+      count = await Model.count(query);
+    } else {
+      count = await Model.findAll(query);
+      count=count.length
+    }
     responseFunction(req, res, 200, data, count);
   });
 };

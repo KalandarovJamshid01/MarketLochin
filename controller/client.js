@@ -32,7 +32,7 @@ const updateOneClient = updateOne(clients);
 const deleteOneClient = deleteOne(clients);
 const getDebitorsFile = catchErrorAsync(async (req, res, next) => {
   const debitors = await sequelize.query(
-    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum FROM clients left join debts on clients.id=debts.clientId group by clients.id ORDER BY clients.clientPaymentDate ASC`,
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum FROM clients left join debts on clients.id=debts.clientId group by clients.id HAVING SUM(debts.debt)!=0 or SUM(debts.debt)!=null ORDER BY clients.clientPaymentDate ASC`,
     {
       type: QueryTypes.SELECT,
     }
