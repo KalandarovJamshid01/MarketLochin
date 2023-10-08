@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 
 const responseFunction = (req, res, statusCode, data, count) => {
   let page = req?.query?.page || 1;
-  let limit = data.length;
+  let limit = req.query?.limit * 1 || count;
 
   let pageCount;
 
@@ -32,8 +32,8 @@ const responseFunction = (req, res, statusCode, data, count) => {
 const queryFunction = (req) => {
   let paramQuerySQL = {};
   let sort = req.query?.sort || "";
-  let page = req.query?.page;
-  let limit = req.query?.limit;
+  let page = req.query?.page || null;
+  let limit = req.query?.limit || null;
   let offset;
 
   // sorting
@@ -48,11 +48,12 @@ const queryFunction = (req) => {
   }
 
   // pagination
-  if (typeof page !== "undefined" && typeof limit !== "undefined") {
+  if (page && limit) {
     offset = page * limit - limit;
     paramQuerySQL.offset = offset;
-    paramQuerySQL.limit = limit;
+    paramQuerySQL.limit = limit * 1;
   }
+
   return paramQuerySQL;
 };
 
@@ -192,6 +193,7 @@ const getAll = (Model, options, searchField1, searchField2) => {
     if (options) {
       query.include = options;
     }
+    console.log(queryPage);
     const data = await Model.findAll({
       ...query,
       ...queryPage,

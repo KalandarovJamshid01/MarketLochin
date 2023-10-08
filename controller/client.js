@@ -59,7 +59,7 @@ const getDebitorsFile = catchErrorAsync(async (req, res, next) => {
 
         // Run functions
       ],
-      content: arr,
+      content: debitors,
     },
   ];
 
