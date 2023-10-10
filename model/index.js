@@ -1,12 +1,17 @@
 const dbConfig = require("./../config/dbConfig");
 
 const { Sequelize, DataTypes } = require("sequelize");
-
-const sequelize = new Sequelize(dbConfig.db, dbConfig.username, dbConfig.password, {
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-  operatorsAliases: false,
-});
+console.log(dbConfig.password);
+const sequelize = new Sequelize(
+  dbConfig.db,
+  dbConfig.username,
+  dbConfig.password,
+  {
+    host: dbConfig.host,
+    dialect: dbConfig.dialect,
+    operatorsAliases: false,
+  }
+);
 
 const sellers = require("./seller");
 const stores = require("./store");
