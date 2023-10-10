@@ -7,20 +7,20 @@ module.exports = (err, req, res, next) => {
   }
   if (process.env.NODE_ENV === "DEVELOPMENT") {
     if (req.originalUrl.startsWith("/api/")) {
-      res.status(err?.statusCode).json({
+      res.status(err.statusCode).json({
         status: err.status,
         error: err,
         message: err.message,
         stack: err.stack,
       });
     } else {
-      res.status(err?.statusCode).render("error", {
+      res.status(err.statusCode).render("error", {
         message: err.message,
       });
     }
   } else if (process.env.NODE_ENV === "PRODUCTION") {
     if (req.originalUrl.startsWith("/api/")) {
-      res.status(err?.statusCode).json({
+      res.status(err.statusCode).json({
         status: err.status,
         message: err.message,
       });
