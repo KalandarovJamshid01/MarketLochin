@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
     soldQuantity: {
       type: DataTypes.BIGINT,
     },
+    
+    soldProductMeasure: {
+      type: DataTypes.STRING,
+    },
   });
   return soldproducts;
 };
