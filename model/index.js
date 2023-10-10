@@ -1,7 +1,7 @@
 const dbConfig = require("./../config/dbConfig");
 
 const { Sequelize, DataTypes } = require("sequelize");
-console.log(dbConfig.password);
+
 const sequelize = new Sequelize(
   dbConfig.db,
   dbConfig.username,
