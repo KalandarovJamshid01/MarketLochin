@@ -61,6 +61,16 @@ db.payments.belongsTo(db.sales, {
     name: "saleId",
   },
 });
+db.payments.belongsTo(db.stores, {
+  foreignKey: {
+    name: "storeId",
+  },
+});
+db.stores.hasMany(db.payments, {
+  foreignKey: {
+    name: "storeId",
+  },
+});
 
 db.clients.hasMany(db.payments, {
   foreignKey: {
