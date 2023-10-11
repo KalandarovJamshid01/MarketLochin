@@ -38,6 +38,8 @@ app.use(
       "http://127.0.0.1:5173",
       "https://magazines-saller.vercel.app/",
       "https://magazines-admin.vercel.app/",
+      "https://marketlochin.uz/",
+      "https://admin.marketlochin.uz/",
       "*",
     ],
     credentials: true,

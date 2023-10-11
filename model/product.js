@@ -31,6 +31,5 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
     },
   });
-
   return products;
 };

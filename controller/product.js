@@ -46,7 +46,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
   const path = parceUrl(req.body.url);
 
   const result = excelToJson({
-    sourceFile: `${__dirname}./..${path.pathname}`,
+    sourceFile: `/root/lochin/MarketLochin${path.pathname}`,
   });
   if (!result) {
     return next(new AppError("Faylni saqlashda xatolik yuz berdi", 402));
