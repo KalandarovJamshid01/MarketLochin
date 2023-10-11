@@ -3,6 +3,7 @@ const db = require("./../model/index");
 const clients = db.clients;
 const sequelize = db.sequelize;
 const xlsx = require("json-as-xlsx");
+const axios = require("axios");
 const { QueryTypes } = require("sequelize");
 const {
   getAll,
@@ -78,6 +79,55 @@ const getDebitorsFile = catchErrorAsync(async (req, res, next) => {
   res.setHeader("Content-Type", "application/vnd.ms-excel");
   res.end(file);
 });
+const sendSms = catchErrorAsync(async (req, res, next) => {
+  const data = {
+    email: "kalandarovjamshid01@gmail.com",
+    password: "eJgfZSxUpqxiRrKqXBwXo88IKhXOk6WFFwIBZGqR",
+  };
+  var config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: "https://notify.eskiz.uz/api/auth/login",
+    headers: {},
+    data: data,
+  };
+
+  const authData = await axios(config);
+  console.log(authData.data.data.token);
+  await Promise.all(
+    req.body.map(async (item) => {
+      let user = await sequelize.query(
+        `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum FROM clients left join debts on clients.id=debts.clientId where clients.id=${item} group by clients.id`,
+        { type: QueryTypes.SELECT }
+      );
+      user = user[0];
+      console.log(user.clientPaymentDate);
+      user.clientPaymentDate = new Date(user.clientPaymentDate)
+        .toUTCString()
+        .split(" ")
+        .slice(0, 4)
+        .join(" ");
+
+      var config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "https://notify.eskiz.uz/api/message/sms/send",
+        headers: {
+          Authorization: `Bearer ${authData.data.data.token}`,
+        },
+        data: {
+          mobile_phone: user.clientPhone,
+          message: `Hurmatli ${user.clientName}, sizning Lochin Market do'konidan ${user.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${user.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
+          from: 4546,
+          callback_url: "https://marketlochin.uz",
+        },
+      };
+      const sendData = await axios(config);
+      console.log(sendData);
+    })
+  );
+  responseFunction(req, res, 200, "Send", 1);
+});
 module.exports = {
   getAllClients,
   addOneClient,
@@ -85,4 +135,5 @@ module.exports = {
   updateOneClient,
   deleteOneClient,
   getDebitorsFile,
+  sendSms,
 };
