@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { role, protect } = require("../controller/verify");
 const {
   addOneProduct,
   getAllProducts,
@@ -9,13 +10,16 @@ const {
   getProductFile,
 } = require("./../controller/product");
 
-router.route("/").get(getAllProducts).post(addOneProduct);
-router.route("/file/:adressId").post(addProductByFile).get(getProductFile);
+router.route("/").get(protect, getAllProducts).post(protect, addOneProduct);
+router
+  .route("/file/:adressId")
+  .post(protect, addProductByFile)
+  .get(protect, getProductFile);
 
 router
   .route("/:id")
-  .get(getOneProduct)
-  .patch(updateProduct)
-  .delete(deleteProduct);
+  .get(protect, getOneProduct)
+  .patch(protect, updateProduct)
+  .delete(protect, role(["admin"]), deleteProduct);
 
 module.exports = router;

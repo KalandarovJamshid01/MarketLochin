@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { role, protect } = require("../controller/verify");
 const {
   addOneSale,
   getAllSales,
@@ -8,9 +9,13 @@ const {
   checkFile,
 } = require("./../controller/sale");
 
-router.route("/").get(getAllSales).post(addOneSale);
+router.route("/").get(protect, getAllSales).post(protect, addOneSale);
 
-router.route("/file/:id").get(checkFile)
-router.route("/:id").get(getOneSale).patch(updateSale).delete(deleteSale);
+router.route("/file/:id").get(protect, checkFile);
+router
+  .route("/:id")
+  .get(protect, getOneSale)
+  .patch(protect, role(["admin"]), updateSale)
+  .delete(protect, role(["admin"]), deleteSale);
 
 module.exports = router;

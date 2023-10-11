@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { protect, role } = require("../controller/verify");
 const {
   getAllClients,
   getOneClient,
@@ -8,11 +9,11 @@ const {
   getDebitorsFile,
 } = require("./../controller/client");
 
-router.route("/").get(getAllClients).post(addOneClient);
-router.route("/file").get(getDebitorsFile);
+router.route("/").get(protect, getAllClients).post(protect, addOneClient);
+router.route("/file").get(protect, getDebitorsFile);
 router
   .route("/:id")
-  .get(getOneClient)
-  .patch(updateOneClient)
-  .delete(deleteOneClient);
+  .get(protect, getOneClient)
+  .patch(protect, role(["admin"]), updateOneClient)
+  .delete(protect, role(["admin"]), deleteOneClient);
 module.exports = router;

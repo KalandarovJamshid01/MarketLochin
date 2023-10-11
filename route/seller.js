@@ -12,31 +12,14 @@ const {
 
 router
   .route("/")
-  .get(
-    // protect, role(["admin", "seller"]),
-    getAllSellers
-  )
-  .post(
-    // protect,role,
-    bcryptFunc,
-    addSeller
-  );
+  .get(protect, role(["admin"]), getAllSellers)
+  .post(protect, role("admin"), bcryptFunc, addSeller);
 
 router.route("/me").get(protect, sellerMe);
 router
   .route("/:id")
-  .get(
-    // protect,role,
-    getOneSeller
-  )
-  .patch(
-    // protect,role,
-    bcryptFunc,
-    updateOneSeller
-  )
-  .delete(
-    // protect,role,
-    deletOneSeller
-  );
+  .get(protect, getOneSeller)
+  .patch(protect, role(["admin"]), bcryptFunc, updateOneSeller)
+  .delete(protect, role(["admin"]), deletOneSeller);
 
 module.exports = router;
