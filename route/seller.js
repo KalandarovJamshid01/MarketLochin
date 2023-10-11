@@ -13,7 +13,7 @@ const {
 router
   .route("/")
   .get(
-    // protect, role(["admin"]),
+    protect, role(["admin"]),
     getAllSellers)
   .post(protect, role("admin"), bcryptFunc, addSeller);
 
