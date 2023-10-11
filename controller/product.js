@@ -62,17 +62,19 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
       await products.create({
         productName: item?.A,
         productModel: item?.B,
-        productPrice: item?.C,
-        productQuantity: item?.D,
-        productMeasure: item?.E,
+        productMainPrice: item?.C,
+        productPrice: item?.D,
+        productQuantity: item?.E,
+        productMeasure: item?.F,
         storeId: req.body.storeId,
         adressId: req.params.adressId,
       });
     } else {
-      let productQuantity = item?.D + product?.productQuantity;
+      let productQuantity = item?.E + product?.productQuantity;
       await products.update(
         {
-          productPrice: item?.C || product.productPrice,
+          productMainPrice: item?.C || product?.productMainPrice,
+          productPrice: item?.D || product.productPrice,
           productQuantity: productQuantity,
         },
         { where: { id: product.id } }
@@ -102,6 +104,10 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
       columns: [
         { label: "Mahsulot nomi", value: (row) => row.productName }, // Top level data
         { label: "Mahsulot modeli", value: (row) => row.productModel },
+        {
+          label: "Mahsulot asl narxi",
+          value: (row) => row.productMainPrice + " " + "so'm",
+        },
         {
           label: "Mahsulot narxi",
           value: (row) => row.productPrice + " " + "so'm",
