@@ -16,7 +16,7 @@ router
     protect, role(["admin"]),
     getAllSellers)
   .post(
-    // protect, role("admin"),
+    protect, role("admin"),
     bcryptFunc, addSeller);
 
 router.route("/me").get(protect, sellerMe);
