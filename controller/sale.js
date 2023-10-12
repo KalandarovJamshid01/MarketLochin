@@ -62,6 +62,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       paymentType: item.paymentType,
       saleId: sale.id,
       clientId: req.body?.clientId,
+      storeId: req.body.storeId,
     });
   });
   req.body.soldproducts?.map(async (item) => {
