@@ -11,7 +11,7 @@ const {
 } = require("./../controller/client");
 
 router.route("/").get(protect, getAllClients).post(
-  // protect,
+  protect,
   addOneClient
 );
 router.route("/file").get(protect, getDebitorsFile);
