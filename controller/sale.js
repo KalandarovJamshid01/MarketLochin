@@ -78,6 +78,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       soldPrice: item.soldPrice,
       soldQuantity: item.soldQuantity,
       soldProductName: item.soldProductName,
+      soldProductMeasure: item.soldProductMeasure,
     });
     await products.update(
       {

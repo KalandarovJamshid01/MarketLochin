@@ -40,7 +40,6 @@ const addOneDebt = catchErrorAsync(async (req, res, next) => {
       }
     );
   }
-
   responseFunction(req, res, 201, debt, 1);
 });
 const getAllDebts = getAll(debts);
