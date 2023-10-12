@@ -6,6 +6,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     debtStatus: {
       type: DataTypes.ENUM("active", "archive"),
+      defaultValue: "active",
     },
   });
   return debts;
