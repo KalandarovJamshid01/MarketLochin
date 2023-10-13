@@ -64,13 +64,14 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
         productModel: item?.B,
         productMainPrice: item?.C,
         productPrice: item?.D,
-        productQuantity: item?.E,
-        productMeasure: item?.F,
+        productCurrency: item?.E,
+        productQuantity: item?.F,
+        productMeasure: item?.G,
         storeId: req.body.storeId,
         adressId: req.params.adressId,
       });
     } else {
-      let productQuantity = item?.E + product?.productQuantity;
+      let productQuantity = item?.F + product?.productQuantity;
       await products.update(
         {
           productMainPrice: item?.C || product?.productMainPrice,
@@ -93,7 +94,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
 
 const getProductFile = catchErrorAsync(async (req, res, next) => {
   const products = await sequelize.query(
-    `SELECT productName, productModel, productPrice, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=${req.params.adressId} ORDER BY products.productQuantity ASC`,
+    `SELECT productName, productModel, productPrice,productCurrency, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=${req.params.adressId} ORDER BY products.productQuantity ASC`,
     {
       type: QueryTypes.SELECT,
     }
@@ -111,6 +112,10 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
         {
           label: "Mahsulot narxi",
           value: (row) => row.productPrice + " " + "so'm",
+        },
+        {
+          label: "Mahsulot valyutasi",
+           value: (row) => row?.productCurrency,
         },
         {
           label: "Mahsulot miqdori",

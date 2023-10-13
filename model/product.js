@@ -30,6 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     productMainPrice: {
       type: DataTypes.BIGINT,
     },
+    productCurrency: {
+      type: DataTypes.ENUM("dollar", "sum"),
+    },
   });
   return products;
 };

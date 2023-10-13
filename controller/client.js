@@ -93,15 +93,15 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
   };
 
   const authData = await axios(config);
-  console.log(authData.data.data.token);
+
   await Promise.all(
     req.body.map(async (item) => {
       let user = await sequelize.query(
-        `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum FROM clients left join debts on clients.id=debts.clientId where clients.id=${item} group by clients.id`,
+        `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.id} and clients.id=${item}  group by clients.id`,
         { type: QueryTypes.SELECT }
       );
       user = user[0];
-      console.log(user.clientPaymentDate);
+
       user.clientPaymentDate = new Date(user.clientPaymentDate)
         .toUTCString()
         .split(" ")
@@ -117,17 +117,24 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
         },
         data: {
           mobile_phone: user.clientPhone,
-          message: `Hurmatli ${user.clientName}, sizning Lochin Market do'konidan ${user.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${user.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
+          message: `Hurmatli ${user.clientName}, sizning ${user.storeName} do'konidan ${user.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${user.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
           from: 4546,
           callback_url: "https://marketlochin.uz",
         },
       };
       const sendData = await axios(config);
-      console.log(sendData);
     })
   );
   responseFunction(req, res, 200, "Send", 1);
 });
+
+const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
+  const clients = await sequelize(
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} group by clients.id`
+  );
+  responseFunction(req, res, 200, clients, clients.length);
+});
+
 module.exports = {
   getAllClients,
   addOneClient,
@@ -136,4 +143,5 @@ module.exports = {
   deleteOneClient,
   getDebitorsFile,
   sendSms,
+  getDebitorsStore,
 };

@@ -115,9 +115,9 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
 
   soldproducts.map((item) => {
     item.totalPrice = item.soldQuantity * item.soldPrice;
-    item.client = `${sale[0]?.clientName || ""} ${sale[0]?.clientPhone || ""} ${
-      sale[0]?.clientAdress || ""
-    }`;
+    item.client = `${sale[0]?.clientName + "," || ""} ${
+      sale[0]?.clientPhone + "," || ""
+    } ${sale[0]?.clientAdress + "," || ""}`;
     item.comment = sale[0]?.comment || "";
   });
 
@@ -155,7 +155,9 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
   res.statusCode = 200;
   res.setHeader(
     "Content-Disposition",
-    `attachment; filename=" ${sale[0].clientName} Check File.xls"`
+    `attachment; filename=" ${
+      sale[0]?.clientName || sale[0]?.comment
+    } Check File.xls"`
   );
   res.setHeader("Content-Type", "application/vnd.ms-excel");
   res.end(file);

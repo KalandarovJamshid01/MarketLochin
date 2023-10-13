@@ -11,7 +11,12 @@ const {
 } = require("./handlerController");
 
 const addAllCurrencies = addOne(currencies);
-const getAllCurrencies = getAll(currencies);
+const getAllCurrencies = getAll(
+  currencies,
+  null,
+  "currencyMoney",
+  "currencyOption"
+);
 const getOneCurrency = getOne(currencies);
 const updateOneCurrency = updateOne(currencies);
 const deleteOneCurrency = deleteOne(currencies);

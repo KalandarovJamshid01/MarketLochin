@@ -7,15 +7,20 @@ const {
   updateOneClient,
   deleteOneClient,
   getDebitorsFile,
+  getDebitorsStore,
   sendSms,
 } = require("./../controller/client");
 
-router.route("/").get(protect, getAllClients).post(
-  protect,
-  addOneClient
-);
+router.route("/").get(protect, getAllClients).post(protect, addOneClient);
 router.route("/file").get(protect, getDebitorsFile);
-router.route("/sms").post(protect, role(["admin"]), sendSms);
+router
+  .route("/sms/:storeId")
+  .get(
+    // protect, role(["admin"]),
+    getDebitorsStore)
+  .post(
+    // protect, role(["admin"]),
+    sendSms);
 router
   .route("/:id")
   .get(protect, getOneClient)
