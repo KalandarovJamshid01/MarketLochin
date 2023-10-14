@@ -129,8 +129,11 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
 });
 
 const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
-  const clients = await sequelize(
-    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} group by clients.id`
+  const clients = await sequelize.query(
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} group by clients.id`,
+    {
+      type: QueryTypes.SELECT,
+    }
   );
   responseFunction(req, res, 200, clients, clients.length);
 });
