@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       unique: true,
     },
     productPrice: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.0,
       allowNull: false,
     },
     productQuantity: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-      defaultValue: 0,
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.0,
     },
     productOption: {
       type: DataTypes.STRING,
@@ -29,27 +29,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("kg", "litr", "dona", "metr", "metrkv"),
     },
     productMainPrice: {
-      type: DataTypes.BIGINT,
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.0,
     },
     productCurrency: {
       type: DataTypes.ENUM("dollar", "sum"),
+      defaultValue: "sum",
     },
   });
-  queryInterface.changeColumn("products", "productCurrency", {
-    type: DataTypes.ENUM("dollar", "sum"),
-    defaultValue: "sum",
-  });
-  queryInterface.changeColumn("products", "productPrice", {
-    type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0.0,
-  });
-  queryInterface.changeColumn("products", "productQuantity", {
-    type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0.0,
-  });
-  queryInterface.changeColumn("products", "productMainPrice", {
-    type: DataTypes.DECIMAL(10, 2),
-    defaultValue: 0.0,
-  });
+  // queryInterface.changeColumn("products", "productCurrency", {
+  //   type: DataTypes.ENUM("dollar", "sum"),
+  //   defaultValue: "sum",
+  // });
+  // queryInterface.changeColumn("products", "productPrice", {
+  //   type: DataTypes.DECIMAL(10, 2),
+  //   defaultValue: 0.0,
+  // });
+  // queryInterface.changeColumn("products", "productQuantity", {
+  //   type: DataTypes.DECIMAL(10, 2),
+  //   defaultValue: 0.0,
+  // });
+  // queryInterface.changeColumn("products", "productMainPrice", {
+  //   type: DataTypes.DECIMAL(10, 2),
+  //   defaultValue: 0.0,
+  // });
   return products;
 };
