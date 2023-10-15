@@ -102,7 +102,7 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
   );
   await Promise.all(
     debitors.map(async (item) => {
-      item.clientPaymentDate = new Date(user.clientPaymentDate)
+      item.clientPaymentDate = new Date(item.clientPaymentDate)
         .toUTCString()
         .split(" ")
         .slice(0, 4)
@@ -116,7 +116,7 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
           Authorization: `Bearer ${authData.data.data.token}`,
         },
         data: {
-          mobile_phone: user.clientPhone,
+          mobile_phone: item.clientPhone,
           message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
           from: 4546,
           callback_url: "https://marketlochin.uz",
