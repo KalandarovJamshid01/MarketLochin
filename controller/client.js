@@ -91,18 +91,18 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
     headers: {},
     data: data,
   };
-
   const authData = await axios(config);
-
+  const debitors = await sequelize.query(
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} and clients.clientPaymentDate>=${new Date()
+      .toISOString()
+      .slice(0, 10)} group by clients.id`,
+    {
+      type: QueryTypes.SELECT,
+    }
+  );
   await Promise.all(
-    req.body.map(async (item) => {
-      let user = await sequelize.query(
-        `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.id} and clients.id=${item}  group by clients.id`,
-        { type: QueryTypes.SELECT }
-      );
-      user = user[0];
-
-      user.clientPaymentDate = new Date(user.clientPaymentDate)
+    debitors.map(async (item) => {
+      item.clientPaymentDate = new Date(user.clientPaymentDate)
         .toUTCString()
         .split(" ")
         .slice(0, 4)
@@ -117,15 +117,15 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
         },
         data: {
           mobile_phone: user.clientPhone,
-          message: `Hurmatli ${user.clientName}, sizning ${user.storeName} do'konidan ${user.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${user.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
+          message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
           from: 4546,
           callback_url: "https://marketlochin.uz",
         },
       };
-      const sendData = await axios(config);
+      await axios(config);
     })
   );
-  responseFunction(req, res, 200, "Send", 1);
+  responseFunction(req, res, 200, debitors, 1);
 });
 
 const getDebitorsStore = catchErrorAsync(async (req, res, next) => {

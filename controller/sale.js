@@ -80,6 +80,7 @@ const addOneSale = catchErrorAsync(async (req, res, next) => {
       soldProductName: item.soldProductName,
       soldProductMeasure: item.soldProductMeasure,
     });
+
     await products.update(
       {
         productQuantity: quantity,
