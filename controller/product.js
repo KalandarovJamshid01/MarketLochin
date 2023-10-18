@@ -71,7 +71,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
         adressId: req.params.adressId,
       });
     } else {
-      let productQuantity = item?.F + product?.productQuantity;
+      let productQuantity = item?.F * 1 + product?.productQuantity * 1;
       await products.update(
         {
           productMainPrice: item?.C || product?.productMainPrice,
@@ -115,7 +115,7 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
         },
         {
           label: "Mahsulot valyutasi",
-           value: (row) => row?.productCurrency,
+          value: (row) => row?.productCurrency,
         },
         {
           label: "Mahsulot miqdori",
