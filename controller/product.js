@@ -94,7 +94,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
 
 const getProductFile = catchErrorAsync(async (req, res, next) => {
   const products = await sequelize.query(
-    `SELECT productName, productModel, productPrice,productCurrency, productQuantity,productMeasure, adressName from products left join adresses on adresses.id=${req.params.adressId} ORDER BY products.productQuantity ASC`,
+    `SELECT productName, productModel, productPrice,productCurrency, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=${req.params.adressId} ORDER BY products.productQuantity ASC`,
     {
       type: QueryTypes.SELECT,
     }
