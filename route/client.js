@@ -16,11 +16,16 @@ router.route("/file").get(protect, getDebitorsFile);
 router
   .route("/sms/:storeId")
   .get(
-    // protect, role(["admin"]),
-    getDebitorsStore)
+    protect,
+    // role(["admin"]),
+
+    getDebitorsStore
+  )
   .post(
-    // protect, role(["admin"]),
-    sendSms);
+    protect,
+    // role(["admin"]),
+    sendSms
+  );
 router
   .route("/:id")
   .get(protect, getOneClient)

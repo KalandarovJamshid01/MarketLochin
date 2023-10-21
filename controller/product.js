@@ -44,7 +44,6 @@ const updateProduct = updateOne(products);
 const deleteProduct = deleteOne(products);
 const addProductByFile = catchErrorAsync(async (req, res, next) => {
   const path = parceUrl(req.body.url);
-
   const result = excelToJson({
     sourceFile: `/root/lochin/MarketLochin${path.pathname}`,
   });
@@ -94,7 +93,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
 
 const getProductFile = catchErrorAsync(async (req, res, next) => {
   const products = await sequelize.query(
-    `SELECT productName, productModel, productPrice,productCurrency, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=adresses.id where products.adressId=${req.params.adressId} ORDER BY products.productQuantity ASC`,
+    `SELECT productName, productModel, productPrice,productCurrency, productQuantity,productMeasure, adressName from products left join adresses on products.adressId=adresses.id where products.adressId=${req.params.adressId} and products.storeId=${req.body.storeId} ORDER BY products.productQuantity ASC`,
     {
       type: QueryTypes.SELECT,
     }
@@ -139,7 +138,6 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
   };
 
   const file = xlsx(data, settings);
-
   res.statusCode = 200;
   res.setHeader(
     "Content-Disposition",
