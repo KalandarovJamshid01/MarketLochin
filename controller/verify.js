@@ -37,11 +37,11 @@ const protect = catchErrorAsync(async (req, res, next) => {
 
 const role = (roles) => {
   return catchErrorAsync(async (req, res, next) => {
-    if (!roles.includes(req.user.sellerRole)) {
-      return next(
-        new AppError("Siz bu amaliyotni bajarish huquqiga ega emassiz!", 401)
-      );
-    }
+    // if (!roles.includes(req.user.sellerRole)) {
+    //   return next(
+    //     new AppError("Siz bu amaliyotni bajarish huquqiga ega emassiz!", 401)
+    //   );
+    // }
     next();
   });
 };
