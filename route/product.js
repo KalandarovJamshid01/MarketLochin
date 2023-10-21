@@ -11,10 +11,10 @@ const {
 } = require("./../controller/product");
 
 router.route("/").get(protect, getAllProducts).post(protect, addOneProduct);
-router
-  .route("/file/:adressId")
-  .post(protect, addProductByFile)
-  .get(protect, getProductFile);
+router.route("/file/:adressId/:storeId").post(protect, addProductByFile).get(
+  protect,
+  getProductFile
+);
 
 router
   .route("/:id")
