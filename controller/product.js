@@ -107,11 +107,12 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
         { label: "Mahsulot modeli", value: (row) => row.productModel },
         {
           label: "Mahsulot asl narxi",
-          value: (row) => row.productMainPrice + " " + "so'm",
+          value: (row) =>
+            row?.productMainPrice || 0 + " " + row?.productCurrency,
         },
         {
           label: "Mahsulot narxi",
-          value: (row) => row.productPrice + " " + "so'm",
+          value: (row) => row.productPrice + " " + row?.productCurrency,
         },
         {
           label: "Mahsulot valyutasi",
