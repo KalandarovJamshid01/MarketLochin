@@ -29,7 +29,6 @@ const protect = catchErrorAsync(async (req, res, next) => {
     if (!seller) {
       return next(new AppError("You are not register", 401));
     }
-
     req.user = seller.dataValues;
     next();
   });

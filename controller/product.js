@@ -66,7 +66,7 @@ const addProductByFile = catchErrorAsync(async (req, res, next) => {
         productCurrency: item?.E,
         productQuantity: item?.F,
         productMeasure: item?.G,
-        storeId: req.body.storeId,
+        storeId: req.params.storeId,
         adressId: req.params.adressId,
       });
     } else {
