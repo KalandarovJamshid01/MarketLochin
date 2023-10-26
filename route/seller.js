@@ -8,12 +8,14 @@ const {
   updateOneSeller,
   deletOneSeller,
   sellerMe,
+  deleteAllSellers,
 } = require("./../controller/seller");
 
 router
   .route("/")
   .get(protect, role(["admin"]), getAllSellers)
-  .post(protect, role("admin"), bcryptFunc, addSeller);
+  .post(protect, role("admin"), bcryptFunc, addSeller)
+  .delete(protect, deleteAllSellers);
 
 router.route("/me").get(protect, sellerMe);
 router

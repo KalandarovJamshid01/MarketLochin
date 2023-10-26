@@ -6,12 +6,15 @@ const {
   getOneAdress,
   updateAdress,
   deleteAdress,
+  deleteAllAdress,
 } = require("./../controller/adress");
 
 router
   .route("/")
   .get(protect, getAllAdresses)
-  .post(protect, role(["admin"]), addOneAdress);
+  .post(protect, role(["admin"]), addOneAdress)
+  .delete(protect, deleteAllAdress);
+
 router
   .route("/:id")
   .get(protect, getOneAdress)

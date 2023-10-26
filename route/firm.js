@@ -6,9 +6,14 @@ const {
   addAllFirms,
   updateOneFirm,
   deleteOneFirm,
+  deleteAllFirms,
 } = require("./../controller/firm");
 
-router.route("/").get(protect, getAllFirms).post(protect, addAllFirms);
+router
+  .route("/")
+  .get(protect, getAllFirms)
+  .post(protect, addAllFirms)
+  .delete(protect, deleteAllFirms);
 router
   .route("/:id")
   .get(protect, getOneFirm)

@@ -14,6 +14,7 @@ const {
   deleteOne,
   updateOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 
 const options = [
@@ -164,6 +165,7 @@ const checkFile = catchErrorAsync(async (req, res, next) => {
   res.end(file);
 });
 
+const deleteAllSales = deleteAll(sales);
 module.exports = {
   addOneSale,
   getAllSales,
@@ -171,4 +173,5 @@ module.exports = {
   updateSale,
   deleteSale,
   checkFile,
+  deleteAllSales,
 };

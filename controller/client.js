@@ -12,6 +12,7 @@ const {
   updateOne,
   deleteOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 
 const options = [
@@ -93,7 +94,9 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
   };
   const authData = await axios(config);
   const debitors = await sequelize.query(
-    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} and clients.clientPaymentDate>=${new Date()
+    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${
+      req.params.storeId
+    } and clients.clientPaymentDate>=${new Date()
       .toISOString()
       .slice(0, 10)} group by clients.id`,
     {
@@ -138,6 +141,7 @@ const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
   responseFunction(req, res, 200, clients, clients.length);
 });
 
+const deleteAllClients = deleteAll(clients);
 module.exports = {
   getAllClients,
   addOneClient,
@@ -147,4 +151,5 @@ module.exports = {
   getDebitorsFile,
   sendSms,
   getDebitorsStore,
+  deleteAllClients,
 };

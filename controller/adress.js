@@ -9,15 +9,15 @@ const {
   deleteOne,
   updateOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 
 const addOneAdress = addOne(adresses);
-const getAllAdresses = getAll(adresses,null,"adressName","adressImgUrl");
+const getAllAdresses = getAll(adresses, null, "adressName", "adressImgUrl");
 const getOneAdress = getOne(adresses);
 const updateAdress = updateOne(adresses);
 const deleteAdress = deleteOne(adresses);
-
-
+const deleteAllAdress = deleteAll(adresses);
 
 module.exports = {
   addOneAdress,
@@ -25,4 +25,5 @@ module.exports = {
   getOneAdress,
   updateAdress,
   deleteAdress,
+  deleteAllAdress,
 };

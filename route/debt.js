@@ -6,9 +6,14 @@ const {
   addOneDebt,
   updateOneDebt,
   deleteOneDebt,
+  deleteAllDebts,
 } = require("./../controller/debt");
 
-router.route("/").get(protect, getAllDebts).post(protect, addOneDebt);
+router
+  .route("/")
+  .get(protect, getAllDebts)
+  .post(protect, addOneDebt)
+  .delete(protect, deleteAllDebts);
 
 router
   .route("/:id")

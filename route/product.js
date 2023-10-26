@@ -8,9 +8,14 @@ const {
   deleteProduct,
   addProductByFile,
   getProductFile,
+  deleteAllPrducts,
 } = require("./../controller/product");
 
-router.route("/").get(protect, getAllProducts).post(protect, addOneProduct);
+router
+  .route("/")
+  .get(protect, getAllProducts)
+  .post(protect, addOneProduct)
+  .delete(protect, deleteAllPrducts);
 router
   .route("/file/:adressId/:storeId")
   .post(protect, addProductByFile)

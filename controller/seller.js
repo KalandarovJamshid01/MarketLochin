@@ -11,6 +11,7 @@ const {
   deleteOne,
   updateOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 
 const getAllSellers = getAll(sellers, null, "sellerName", "sellerPhone");
@@ -32,6 +33,7 @@ const addSeller = addOne(sellers);
 const getOneSeller = getOne(sellers);
 const updateOneSeller = updateOne(sellers);
 const deletOneSeller = deleteOne(sellers);
+const deleteAllSellers = deleteAll(sellers);
 module.exports = {
   getAllSellers,
   addSeller,
@@ -40,4 +42,5 @@ module.exports = {
   updateOneSeller,
   deletOneSeller,
   sellerMe,
+  deleteAllSellers,
 };

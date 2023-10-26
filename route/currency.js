@@ -6,12 +6,14 @@ const {
   addAllCurrencies,
   updateOneCurrency,
   deleteOneCurrency,
+  deleteAllCurrencies,
 } = require("./../controller/currency");
 
 router
   .route("/")
   .get(protect, getAllCurrencies)
-  .post(protect, addAllCurrencies);
+  .post(protect, addAllCurrencies)
+  .delete(protect, deleteAllCurrencies);
 router
   .route("/:id")
   .get(protect, getOneCurrency)

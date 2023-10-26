@@ -15,6 +15,7 @@ const {
   deleteOne,
   updateOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 const catchErrorAsync = require("../util/catchError");
 const AppError = require("../util/appError");
@@ -146,6 +147,7 @@ const getProductFile = catchErrorAsync(async (req, res, next) => {
   res.setHeader("Content-Type", "application/vnd.ms-excel");
   res.end(file);
 });
+const deleteAllPrducts = deleteAll(products);
 module.exports = {
   addOneProduct,
   getAllProducts,
@@ -154,4 +156,5 @@ module.exports = {
   deleteProduct,
   addProductByFile,
   getProductFile,
+  deleteAllPrducts,
 };

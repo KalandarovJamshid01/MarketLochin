@@ -7,9 +7,14 @@ const {
   updateSale,
   deleteSale,
   checkFile,
+  deleteAllSales,
 } = require("./../controller/sale");
 
-router.route("/").get(protect, getAllSales).post(protect, addOneSale);
+router
+  .route("/")
+  .get(protect, getAllSales)
+  .post(protect, addOneSale)
+  .delete(protect, deleteAllSales);
 
 router.route("/file/:id").get(protect, checkFile);
 router

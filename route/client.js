@@ -9,9 +9,14 @@ const {
   getDebitorsFile,
   getDebitorsStore,
   sendSms,
+  deleteAllClients,
 } = require("./../controller/client");
 
-router.route("/").get(protect, getAllClients).post(protect, addOneClient);
+router
+  .route("/")
+  .get(protect, getAllClients)
+  .post(protect, addOneClient)
+  .delete(protect, deleteAllClients);
 router.route("/file").get(protect, getDebitorsFile);
 router
   .route("/sms/:storeId")

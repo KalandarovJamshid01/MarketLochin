@@ -8,6 +8,7 @@ const {
   deleteOne,
   responseFunction,
   addOne,
+  deleteAll,
 } = require("./handlerController");
 
 const options = [
@@ -21,11 +22,12 @@ const getAllFirms = getAll(firms, null, "firmName", "firmINN");
 const getOneFirm = getOne(firms, options);
 const updateOneFirm = updateOne(firms);
 const deleteOneFirm = deleteOne(firms);
-
+const deleteAllFirms = deleteAll(firms);
 module.exports = {
   getAllFirms,
   addAllFirms,
   getOneFirm,
   updateOneFirm,
   deleteOneFirm,
+  deleteAllFirms,
 };

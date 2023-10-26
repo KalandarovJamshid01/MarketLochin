@@ -11,6 +11,7 @@ const {
   updateOne,
   deleteOne,
   responseFunction,
+  deleteAll,
 } = require("./handlerController");
 
 const addOneDebt = catchErrorAsync(async (req, res, next) => {
@@ -46,6 +47,7 @@ const getAllDebts = getAll(debts);
 const getOneDebt = getOne(debts);
 const updateOneDebt = updateOne(debts);
 const deleteOneDebt = deleteOne(debts);
+const deleteAllDebts = deleteAll(debts);
 
 module.exports = {
   getAllDebts,
@@ -53,4 +55,5 @@ module.exports = {
   getOneDebt,
   updateOneDebt,
   deleteOneDebt,
+  deleteAllDebts,
 };

@@ -209,6 +209,15 @@ const getAll = (Model, options, searchField1, searchField2) => {
     responseFunction(req, res, 200, data, count);
   });
 };
+const deleteAll = (Model) => {
+  return catchErrorAsync(async (req, res, next) => {
+    const data = await Model.destroy({ where: { id: req.body } });
+    if (!data) {
+      return next(new AppError("Document was not found with that ID", 404));
+    }
+    responseFunction(req, res, 204, data);
+  });
+};
 
 module.exports = {
   deleteOne,
@@ -219,4 +228,5 @@ module.exports = {
   getAll,
   responseFunction,
   getByUserId,
+  deleteAll,
 };
