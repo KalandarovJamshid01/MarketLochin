@@ -103,31 +103,31 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
       type: QueryTypes.SELECT,
     }
   );
-  await Promise.all(
-    debitors.map(async (item) => {
-      item.clientPaymentDate = new Date(item.clientPaymentDate)
-        .toUTCString()
-        .split(" ")
-        .slice(0, 4)
-        .join(" ");
+  // await Promise.all(
+  //   debitors.map(async (item) => {
+  //     item.clientPaymentDate = new Date(item.clientPaymentDate)
+  //       .toUTCString()
+  //       .split(" ")
+  //       .slice(0, 4)
+  //       .join(" ");
 
-      var config = {
-        method: "post",
-        maxBodyLength: Infinity,
-        url: "https://notify.eskiz.uz/api/message/sms/send",
-        headers: {
-          Authorization: `Bearer ${authData.data.data.token}`,
-        },
-        data: {
-          mobile_phone: item.clientPhone,
-          message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
-          from: 4546,
-          callback_url: "https://marketlochin.uz",
-        },
-      };
-      await axios(config);
-    })
-  );
+  //     var config = {
+  //       method: "post",
+  //       maxBodyLength: Infinity,
+  //       url: "https://notify.eskiz.uz/api/message/sms/send",
+  //       headers: {
+  //         Authorization: `Bearer ${authData.data.data.token}`,
+  //       },
+  //       data: {
+  //         mobile_phone: item.clientPhone,
+  //         message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang!`,
+  //         from: 4546,
+  //         callback_url: "https://marketlochin.uz",
+  //       },
+  //     };
+  //     await axios(config);
+  //   })
+  // );
   responseFunction(req, res, 200, debitors, 1);
 });
 

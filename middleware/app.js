@@ -33,6 +33,8 @@ app.use(
     credentials: true,
   })
 );
+
+
 app.use(cookieParser());
 app.set("view engine", "pug");
 app.set("views", path.join(__dirname, "../views"));

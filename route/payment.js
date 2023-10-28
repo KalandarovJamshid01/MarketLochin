@@ -11,8 +11,13 @@ const {
 
 router
   .route("/")
-  .get(protect, getAllPayments)
-  .post(protect, addAllPayments)
+  .get(
+    // protect,
+    getAllPayments
+  )
+  .post(
+    // protect,
+    addAllPayments)
   .delete(protect, deleteAllPayments);
 router
   .route("/:id")
