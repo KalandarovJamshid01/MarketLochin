@@ -96,7 +96,7 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
   const debitors = await sequelize.query(
     `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${
       req.params.storeId
-    } and clients.clientPaymentDate >= ${new Date()
+    } and clients.clientPaymentDate <= ${new Date()
       .toISOString()
       .slice(0, 10)} group by clients.id`,
     {
