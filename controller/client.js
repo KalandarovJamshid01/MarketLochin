@@ -149,6 +149,9 @@ const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
           : req.query.sort.replace("-", "")
       } ${req.query.sort.charAt(0) !== "-" ? "ASC" : "DESC"} `;
   }
+  const count = await sequelize.query(query, {
+    type: QueryTypes.SELECT,
+  });
   if (req.query.limit) {
     req.query.page = req.query.page || 1;
     query =
@@ -157,26 +160,10 @@ const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
         req.query.limit
       }`;
   }
-  const clients = await sequelize.query(
-    // `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where (clients.clientName LIKE '%${
-    //   req.query.search
-    // }%' or clients.clientPhone LIKE '%${
-    //   req.query.search
-    // }%') AND debts.storeId=${
-    //   req.params.storeId
-    // } group by clients.id ORDER BY clients.${
-    //   req.query.sort.charAt(0) !== "-"
-    //     ? req.query.sort
-    //     : req.query.sort.replace("-", "")
-    // } ${req.query.sort.charAt(0) !== "-" ? "ASC" : "DESC"} LIMIT ${
-    //   req.query.page == 1 ? 0 : req.query.page * (req.query.limit - 1)
-    // }, ${req.query.limit}`,
-    query,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-  responseFunction(req, res, 200, clients, clients.length);
+  const clients = await sequelize.query(query, {
+    type: QueryTypes.SELECT,
+  });
+  responseFunction(req, res, 200, clients, count);
 });
 
 const deleteAllClients = deleteAll(clients);
