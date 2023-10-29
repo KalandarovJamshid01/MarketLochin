@@ -30,16 +30,7 @@ const options = [
 ];
 const addOneProduct = addOne(products);
 let getAllProducts = getAll(products, null, "productModel", "productName");
-//   const products = await db.products.findAll({
-//     where: {
-//       [Op.or]: [
-//         { productModel: { [Op.like]: "%" + req.query.search + "%" } },
-//         { productName: { [Op.like]: "%" + req.query.search + "%" } },
-//       ],
-//     },
-//   });
-//   responseFunction(req, res, 200, products, 1);
-// });
+
 const getOneProduct = getOne(products, options);
 const updateProduct = updateOne(products);
 const deleteProduct = deleteOne(products);

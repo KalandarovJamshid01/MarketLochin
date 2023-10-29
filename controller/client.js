@@ -132,8 +132,45 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
 });
 
 const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
+  let query =
+    "SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where ";
+  if (req.query.search) {
+    query =
+      query +
+      `(clients.clientName LIKE '%${req.query.search}%' or clients.clientPhone LIKE '%${req.query.search}%') AND `;
+  }
+  query = query + `debts.storeId=${req.params.storeId} group by clients.id `;
+  if (req.query.sort) {
+    query =
+      query +
+      `ORDER BY ${
+        req.query.sort.charAt(0) !== "-"
+          ? req.query.sort
+          : req.query.sort.replace("-", "")
+      } ${req.query.sort.charAt(0) !== "-" ? "ASC" : "DESC"} `;
+  }
+  if (req.query.page && req.query.limit) {
+    query =
+      query +
+      `LIMIT ${
+        req.query.page == 1 ? 0 : req.query.page * (req.query.limit - 1)
+      }, ${req.query.limit}`;
+  }
   const clients = await sequelize.query(
-    `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where debts.storeId=${req.params.storeId} group by clients.id`,
+    // `SELECT clients.id, clients.clientName,clients.clientPhone,clients.clientAdress,clients.clientPaymentDate,SUM(debts.debt) as debtSum,debts.storeId, stores.storeName, clients.createdAt,clients.updatedAt FROM debts left join clients on debts.clientId=clients.id left join stores on debts.storeId=stores.id where (clients.clientName LIKE '%${
+    //   req.query.search
+    // }%' or clients.clientPhone LIKE '%${
+    //   req.query.search
+    // }%') AND debts.storeId=${
+    //   req.params.storeId
+    // } group by clients.id ORDER BY clients.${
+    //   req.query.sort.charAt(0) !== "-"
+    //     ? req.query.sort
+    //     : req.query.sort.replace("-", "")
+    // } ${req.query.sort.charAt(0) !== "-" ? "ASC" : "DESC"} LIMIT ${
+    //   req.query.page == 1 ? 0 : req.query.page * (req.query.limit - 1)
+    // }, ${req.query.limit}`,
+    query,
     {
       type: QueryTypes.SELECT,
     }

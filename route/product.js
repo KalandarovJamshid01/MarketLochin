@@ -13,7 +13,9 @@ const {
 
 router
   .route("/")
-  .get(protect, getAllProducts)
+  .get(
+    protect,
+    getAllProducts)
   .post(protect, addOneProduct)
   .delete(protect, deleteAllPrducts);
 router
