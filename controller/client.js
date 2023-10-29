@@ -156,14 +156,14 @@ const getDebitorsStore = catchErrorAsync(async (req, res, next) => {
     req.query.page = req.query.page || 1;
     query =
       query +
-      `LIMIT ${req.query.page * (req.query.limit - 1) || 0}, ${
+      `LIMIT ${req.query.limit * (req.query.page - 1) || 0}, ${
         req.query.limit
       }`;
   }
   const clients = await sequelize.query(query, {
     type: QueryTypes.SELECT,
   });
-  responseFunction(req, res, 200, clients, count);
+  responseFunction(req, res, 200, clients, count.length);
 });
 
 const deleteAllClients = deleteAll(clients);

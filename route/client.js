@@ -21,7 +21,7 @@ router.route("/file").get(protect, getDebitorsFile);
 router
   .route("/sms/:storeId")
   .get(
-    protect,
+    // protect,
     // role(["admin"]),
 
     getDebitorsStore
