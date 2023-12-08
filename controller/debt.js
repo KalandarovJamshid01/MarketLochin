@@ -23,6 +23,7 @@ const addOneDebt = catchErrorAsync(async (req, res, next) => {
       type: QueryTypes.SELECT,
     }
   );
+  
   if (debtSum[0].debtSum == 0) {
     debts.update(
       { debtStatus: "archive" },
