@@ -120,7 +120,7 @@ const sendSms = catchErrorAsync(async (req, res, next) => {
         },
         data: {
           mobile_phone: item.clientPhone,
-          message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang! Sizga shuni ma'lum qilamizki, agar joriy qarzingizni shu yilning 15-dekabr sanasigacha to'lamasangiz, qo'shimcha 10% jarima bilan to'lashingizga to'g'ri keladi.`,
+          message: `Hurmatli ${item.clientName}, sizning ${item.storeName} do'konidan ${item.debtSum} so'm miqdorda qarzingiz mavjud. Qarz qaytarish sanasi ${item.clientPaymentDate}. Iltimos qarzingizni o'z vaqtida to'lang! Murojaat uchun: Karimboyev Xusinboy. Telefon raqam:+998 99 680 49 65. Plastik karta:9860600401594863`,
           from: 4546,
           callback_url: 'https://marketlochin.uz',
         },
