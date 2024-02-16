@@ -1,5 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const queryInterface = sequelize.getQueryInterface();
+  
   const products = sequelize.define("products", {
     productName: {
       type: DataTypes.STRING,
