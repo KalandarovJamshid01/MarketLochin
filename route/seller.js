@@ -13,7 +13,9 @@ const {
 
 router
   .route("/")
-  .get(protect, role(["admin"]), getAllSellers)
+  .get(
+    // protect, role(["admin"]),
+    getAllSellers)
   .post(
     // protect, role("admin"),
   
