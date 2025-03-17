@@ -1,6 +1,6 @@
-const dbConfig = require("./../config/dbConfig");
+const dbConfig = require('./../config/dbConfig');
 
-const { Sequelize, DataTypes } = require("sequelize");
+const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(
   dbConfig.db,
@@ -13,24 +13,25 @@ const sequelize = new Sequelize(
   }
 );
 
-const sellers = require("./seller");
-const stores = require("./store");
-const products = require("./product");
-const adresses = require("./adress");
-const payments = require("./payment");
-const sales = require("./sale");
-const soldproducts = require("./soldProduct");
-const clients = require("./client");
-const debts = require("./debt");
-const firms = require("./firm");
-const currencies = require("./currency");
+const sellers = require('./seller');
+const stores = require('./store');
+const products = require('./product');
+const adresses = require('./adress');
+const payments = require('./payment');
+const sales = require('./sale');
+const soldproducts = require('./soldProduct');
+const clients = require('./client');
+const debts = require('./debt');
+const firms = require('./firm');
+const currencies = require('./currency');
+const categories = require('./category');
 sequelize
   .authenticate()
   .then(() => {
-    console.log("connected..");
+    console.log('connected..');
   })
   .catch((err) => {
-    console.log("Error" + err);
+    console.log('Error' + err);
   });
 
 const db = {};
@@ -48,119 +49,131 @@ db.clients = clients(sequelize, DataTypes);
 db.debts = debts(sequelize, DataTypes);
 db.firms = firms(sequelize, DataTypes);
 db.currencies = currencies(sequelize, DataTypes);
+db.categories = categories(sequelize, DataTypes);
 
 db.products.belongsTo(db.stores, {
   foreignKey: {
-    name: "storeId",
+    name: 'storeId',
     allowNull: false,
   },
 });
 
 db.payments.belongsTo(db.sales, {
   foreignKey: {
-    name: "saleId",
+    name: 'saleId',
   },
 });
 db.payments.belongsTo(db.stores, {
   foreignKey: {
-    name: "storeId",
+    name: 'storeId',
   },
 });
 db.stores.hasMany(db.payments, {
   foreignKey: {
-    name: "storeId",
+    name: 'storeId',
   },
 });
 
 db.clients.hasMany(db.payments, {
   foreignKey: {
-    name: "clientId",
+    name: 'clientId',
   },
 });
 
 db.clients.hasMany(db.sales, {
   foreignKey: {
-    name: "clientId",
+    name: 'clientId',
   },
 });
 
 db.clients.hasMany(db.debts, {
   foreignKey: {
-    name: "clientId",
+    name: 'clientId',
     allowNull: false,
   },
 });
 db.products.belongsTo(db.adresses, {
   foreignKey: {
-    name: "adressId",
+    name: 'adressId',
     allowNull: false,
   },
 });
 
 db.products.belongsTo(db.stores, {
   foreignKey: {
-    name: "storeId",
+    name: 'storeId',
     allowNull: false,
   },
 });
 
 db.sales.belongsTo(db.stores, {
   foreignKey: {
-    name: "storeId",
+    name: 'storeId',
     allowNull: false,
   },
 });
 
 db.sales.belongsTo(db.sellers, {
   foreignKey: {
-    name: "sellerId",
+    name: 'sellerId',
     allowNull: false,
   },
 });
 db.sales.belongsTo(db.clients, {
   foreignKey: {
-    name: "clientId",
+    name: 'clientId',
     allowNull: true,
   },
 });
 
 db.sales.hasMany(db.soldproducts, {
   foreignKey: {
-    name: "saleId",
+    name: 'saleId',
     allowNull: false,
   },
 });
 
 db.sales.hasMany(db.debts, {
   foreignKey: {
-    name: "saleId",
+    name: 'saleId',
   },
 });
 db.sales.hasMany(db.payments, {
   foreignKey: {
-    name: "saleId",
+    name: 'saleId',
   },
 });
 
 db.soldproducts.belongsTo(db.products, {
   foreignKey: {
-    name: "productId",
+    name: 'productId',
     allowNull: false,
   },
 });
 
 db.debts.belongsTo(db.stores, {
-  foreignKey: "storeId",
+  foreignKey: 'storeId',
   allowNull: false,
 });
 
 db.firms.hasMany(db.currencies, {
-  foreignKey: "firmId",
+  foreignKey: 'firmId',
   allowNull: false,
 });
 
+db.products.belongsTo(db.categories, {
+  foreignKey: 'categoryId',
+  allowNull: true,
+});
+
+
+db.categories.hasMany(db.products, {
+  foreignKey: 'categoryId',
+  allowNull: true,
+});
+
 db.sequelize.sync({ force: false }).then(() => {
-  console.log("yes re-sync done!");
+  console.log('yes re-sync done!');
 });
 
 module.exports = db;

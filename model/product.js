@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const queryInterface = sequelize.getQueryInterface();
-  
-  const products = sequelize.define("products", {
+
+  const products = sequelize.define('products', {
     productName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -27,15 +27,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
     },
     productMeasure: {
-      type: DataTypes.ENUM("kg", "litr", "dona", "metr", "metrkv"),
+      type: DataTypes.ENUM('kg', 'litr', 'dona', 'metr', 'metrkv'),
     },
     productMainPrice: {
       type: DataTypes.DECIMAL(10, 2),
       defaultValue: 0.0,
     },
     productCurrency: {
-      type: DataTypes.ENUM("dollar", "sum"),
-      defaultValue: "sum",
+      type: DataTypes.ENUM('dollar', 'sum'),
+      defaultValue: 'sum',
+    },
+
+    productDiscPrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      defaultValue: 0.0,
     },
   });
   // queryInterface.changeColumn("products", "productCurrency", {
