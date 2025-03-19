@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
+    categoryImgUrl: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
   });
   return categories;
 };

@@ -11,7 +11,7 @@ const {
 } = require('./handlerController');
 
 const addOneCategory = addOne(categories);
-const getAllCategories = getAll(categories, null, 'CategoryName', 'CategoryId');
+const getAllCategories = getAll(categories);
 const getOneCategory = getOne(categories);
 const updateCategory = updateOne(categories);
 const deleteCategory = deleteOne(categories);

@@ -24,6 +24,8 @@ const debt = require('../route/debt');
 const firm = require('./../route/firm');
 const currency = require('./../route/currency');
 const category = require('./../route/category');
+const slider = require('./../route/slider');
+
 app.set('trust proxy', 1);
 app.use('/uploads', express.static('uploads'));
 app.use('/download', express.static('public'));
@@ -68,6 +70,7 @@ app.use('/api/v1/debts', debt);
 app.use('/api/v1/firms', firm);
 app.use('/api/v1/currencies', currency);
 app.use('/api/v1/categories', category);
+app.use('/api/v1/sliders', slider);
 
 app.all('*', function (req, res, next) {
   next(new AppError(`This url has not found: ${req.originalUrl}`, 404));
