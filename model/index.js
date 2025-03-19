@@ -51,7 +51,7 @@ db.debts = debts(sequelize, DataTypes);
 db.firms = firms(sequelize, DataTypes);
 db.currencies = currencies(sequelize, DataTypes);
 db.categories = categories(sequelize, DataTypes);
-db.sliders = sliders(sequelize, DataTypes);
+db.sliders=sliders(sequelize,DataTypes)
 
 db.products.belongsTo(db.stores, {
   foreignKey: {
@@ -173,7 +173,7 @@ db.categories.hasMany(db.products, {
   allowNull: true,
 });
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   console.log('yes re-sync done!');
 });
 
