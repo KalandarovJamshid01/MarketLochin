@@ -52,7 +52,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
         { label: 'Umumiy narx', value: (row) => row.totalPrice },
         { label: 'Mahsulot valyutasi', value: (row) => row.productCurrency },
         { label: 'Xaridor ismi', value: (row) => row.clientName },
-        { label: 'Xaridor raqami', value: (row) => row.clienPhone },
+        { label: 'Xaridor raqami', value: (row) => row.clientPhone },
         { label: 'Izoh', value: (row) => row.comment },
       ],
       content: result,
