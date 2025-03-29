@@ -94,12 +94,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
       parse_mode: 'HTML',
       reply_markup: {
         inline_keyboard: [
-          [
-            {
-              text: '📄 Yuk hujjatini yuklab olish',
-              url: 'https://magazines-client.vercel.app/',
-            },
-          ],
+          [{ text: '📄 Yuk hujjatini yuklab olish', url: order.fileUrl }],
         ],
       },
     }
