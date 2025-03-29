@@ -85,6 +85,25 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
   });
 
   // **5. Javob qaytarish**
+  Send(
+    `<b>Yangi Buyurtma:</b> ${order.id}\n\n` +
+      `1. <b>Xaridor ismi:</b> ${order.clientName}\n\n` +
+      `2. <b>Xaridor raqami:</b> ${order.clientPhone}\n\n` +
+      `3. <b>Xaridordan izoh:</b> ${order.comment}\n\n`,
+    {
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: '📄 Yuk hujjatini yuklab olish',
+              url: 'https://magazines-client.vercel.app/',
+            },
+          ],
+        ],
+      },
+    }
+  );
 
   res.status(201).json({
     message: 'Order created successfully',

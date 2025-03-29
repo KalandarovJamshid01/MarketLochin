@@ -10,7 +10,6 @@ const path = require('path');
 const morgan = require('morgan');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
 const uploadFile = require('./../route/uploadFile');
 const seller = require('./../route/seller');
 const auth = require('./../route/auth');
@@ -26,7 +25,6 @@ const currency = require('./../route/currency');
 const category = require('./../route/category');
 const slider = require('./../route/slider');
 const orders = require('./../route/order');
-
 app.set('trust proxy', 1);
 app.use('/uploads', express.static('uploads'));
 app.use('/download', express.static('public'));
