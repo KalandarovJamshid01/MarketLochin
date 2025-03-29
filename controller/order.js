@@ -1,133 +1,106 @@
 const catchErrorAsync = require('../util/catchError');
 const db = require('./../model/index');
 const xlsx = require('json-as-xlsx');
-const { QueryTypes } = require('sequelize');
+const fs = require('fs');
+const path = require('path');
+const { Op } = require('sequelize');
 
-const sequelize = db.sequelize;
-const orders = db.orders;
-const products = db.products;
-const {
-  getAll,
-  getOne,
-  deleteOne,
-  responseFunction,
-  deleteAll,
-} = require('./handlerController');
+const { getAll, getOne, deleteOne, deleteAll } = require('./handlerController');
 
-const options = [
-  {
-    model: db.sellers,
-  },
-  {
-    model: db.stores,
-  },
-  {
-    model: db.clients,
-  },
-  {
-    model: db.soldproducts,
-  },
-  {
-    model: db.payments,
-  },
-];
+const addOneOrder = catchErrorAsync(async (req, res, next) => {
+  const { clientPhone, clientName, orders, comment } = req.body;
+  const productIds = orders.map((item) => item.productId);
 
-const options2 = [
-  {
-    model: db.sellers,
-  },
-  {
-    model: db.stores,
-  },
-  {
-    model: db.soldproducts,
-  },
-];
-
-const addOneSale = catchErrorAsync(async (req, res, next) => {
-  const order = await orders.create({
-    ...req.body,
+  // Bazadan mahsulotlarni olish
+  const products = await db.products.findAll({
+    where: { id: { [Op.in]: productIds } },
   });
 
-  responseFunction(req, res, 201, sale, 1);
-});
+  // Buyurtmalarni qayta ishlash
+  const result = orders.map((order) => {
+    const product = products.find((p) => p.id === order.productId);
+    const totalPrice = product?.productDiscPrice
+      ? product.productDiscPrice * order.quantity
+      : product?.productPrice * order.quantity;
 
-const getAllSales = getAll(sales, options2, 'saleId', 'saleMainPrice');
-const getOneSale = getOne(sales, options);
-const updateSale = updateOne(sales);
-const deleteSale = deleteOne(sales);
-const checkFile = catchErrorAsync(async (req, res, next) => {
-  const soldproducts = await sequelize.query(
-    `SELECT productName,productModel,soldPrice,soldQuantity,productMeasure from soldproducts left join products on soldproducts.productId=products.id where saleId=${req.params.id}`,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-
-  const sale = await sequelize.query(
-    `SELECT comment, clientName, clientAdress, clientPhone from sales left join clients on sales.clientId=clients.id where sales.id=${req.params.id}`,
-    {
-      type: QueryTypes.SELECT,
-    }
-  );
-
-  soldproducts.map((item) => {
-    item.totalPrice = item.soldQuantity * item.soldPrice;
-    item.client = `${sale[0]?.clientName + ',' || ''} ${
-      sale[0]?.clientPhone + ',' || ''
-    } ${sale[0]?.clientAdress + ',' || ''}`;
-    item.comment = sale[0]?.comment || '';
+    return {
+      productName: product ? product.productName : 'Unknown',
+      productModel: product ? product.productModel : 'Unknown',
+      productPrice: product
+        ? product.productDiscPrice || product.productPrice
+        : 'Unknown',
+      quantity: order.quantity,
+      totalPrice: totalPrice,
+      clientName: clientName,
+      clientPhone: clientPhone,
+      comment: comment,
+    };
   });
 
+  // Excel fayl uchun ma'lumotlar
   let data = [
     {
       sheet: 'Check',
       columns: [
-        { label: 'Mahsulot nomi', value: (row) => row.productName }, // Top level data
-        { label: 'Mahsulot modeli', value: (row) => row.productModel }, // Custom format
-        {
-          label: 'Mahsulot hajmi',
-          value: (row) => row.soldQuantity + ' ' + row.productMeasure,
-        }, // Custom format
-        { label: 'Mahsulot narxi', value: (row) => row.soldPrice }, // Custom format
-        { label: 'Umumiy narx', value: (row) => row.totalPrice }, // Custom format
-        { label: "Xaridor ma'lumotlari", value: (row) => row.client }, // Custom format
-        { label: 'Izoh', value: (row) => row.comment }, // Custom format
-
-        // Run functions
+        { label: 'Mahsulot nomi', value: (row) => row.productName },
+        { label: 'Mahsulot modeli', value: (row) => row.productModel },
+        { label: 'Miqdor', value: (row) => row.quantity },
+        { label: 'Mahsulot narxi', value: (row) => row.productPrice },
+        { label: 'Umumiy narx', value: (row) => row.totalPrice },
+        { label: "Xaridor ma'lumotlari", value: (row) => row.clientName },
+        { label: 'Izoh', value: (row) => row.comment },
       ],
-      content: soldproducts,
+      content: result,
     },
   ];
 
   let settings = {
-    fileName: 'Check File', // Name of the resulting spreadsheet
-    extraLength: 3, // A bigger number means that columns will be wider
-    writeMode: 'write', // The available parameters are 'WriteFile' and 'write'. This setting is optional. Useful in such cases https://docs.sheetjs.com/docs/solutions/output#example-remote-file
-    writeOptions: { type: 'buffer', bookType: 'xlsx' }, // Style options from https://docs.sheetjs.com/docs/api/write-options
-    RTL: true, // Display the columns from right-to-left (the default value is false)
+    fileName: 'Check_File', // Fayl nomi
+    extraLength: 3,
+    writeMode: 'write',
+    writeOptions: { type: 'buffer', bookType: 'xlsx' },
+    RTL: false,
   };
 
-  const file = xlsx(data, settings);
+  // **1. Faylni yaratish**
+  const buffer = xlsx(data, settings);
 
-  res.statusCode = 200;
-  res.setHeader(
-    'Content-Disposition',
-    `attachment; filename=" ${
-      sale[0]?.clientName || sale[0]?.comment
-    } Check File.xls"`
-  );
-  res.setHeader('Content-Type', 'application/vnd.ms-excel');
-  res.end(file);
+  // **2. Faylni saqlash**
+  const fileName = `check_${clientName.replace(
+    /\s+/g,
+    '_'
+  )}_${Date.now()}.xlsx`; // Fayl nomi unik bo‘lishi uchun
+  const filePath = path.join(__dirname, '../uploads', fileName);
+  fs.writeFileSync(filePath, buffer); // Faylni diskka yozish
+
+  // **3. Fayl URL'ini yaratish**
+  const fileUrl = `${process.env.BASE_URL}/uploads/${fileName}`;
+
+  // **4. Buyurtmani bazaga saqlash**
+  const order = await db.orders.create({
+    clientName,
+    clientPhone,
+    comment,
+    fileUrl, // Yaratilgan fayl URL'ini saqlaymiz
+  });
+
+  // **5. Javob qaytarish**
+  res.status(201).json({
+    message: 'Order created successfully',
+    order,
+    fileUrl,
+  });
 });
 
-const deleteAllSales = deleteAll(sales);
+const getAllOrders = getAll(db.orders);
+const getOneOrder = getOne(db.orders);
+const deleteOrder = deleteOne(db.orders);
+
+const deleteAllOrders = deleteAll(db.orders);
 module.exports = {
-  addOneSale,
-  getAllSales,
-  getOneSale,
-  updateSale,
-  deleteSale,
-  checkFile,
-  deleteAllSales,
+  addOneOrder,
+  getAllOrders,
+  getOneOrder,
+  deleteOrder,
+  deleteAllOrders,
 };
