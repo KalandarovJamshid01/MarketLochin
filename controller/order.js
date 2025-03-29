@@ -19,16 +19,19 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
   // Buyurtmalarni qayta ishlash
   const result = orders.map((order) => {
     const product = products.find((p) => p.id === order.productId);
-    const totalPrice = product?.productDiscPrice
-      ? product.productDiscPrice * order.quantity
-      : product?.productPrice * order.quantity;
-
+    const totalPrice =
+      product?.productDiscPrice && product.productDiscPrice !== 0
+        ? product.productDiscPrice * order.quantity
+        : product?.productPrice * order.quantity;
     return {
       productName: product ? product.productName : 'Unknown',
       productModel: product ? product.productModel : 'Unknown',
       productPrice: product
-        ? product.productDiscPrice || product.productPrice
+        ? product.productDiscPrice && product.productDiscPrice !== 0
+          ? product.productDiscPrice
+          : product.productPrice
         : 'Unknown',
+      productCurrency: product.productCurrency,
       quantity: order.quantity,
       totalPrice: totalPrice,
       clientName: clientName,
@@ -47,6 +50,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
         { label: 'Miqdor', value: (row) => row.quantity },
         { label: 'Mahsulot narxi', value: (row) => row.productPrice },
         { label: 'Umumiy narx', value: (row) => row.totalPrice },
+        { label: 'Mahsulot valyutasi', value: (row) => row.productCurrency },
         { label: 'Xaridor ismi', value: (row) => row.clientName },
         { label: 'Xaridor raqami', value: (row) => row.clienPhone },
         { label: 'Izoh', value: (row) => row.comment },
