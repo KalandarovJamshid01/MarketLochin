@@ -91,7 +91,6 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
 
   // **5. Javob qaytarish**
   Send(
-    `\n\n` +
       `<b>Yangi Buyurtma:</b> ${order.id}\n\n` +
       `1. <b>Xaridor ismi:</b> ${order.clientName}\n\n` +
       `2. <b>Xaridor raqami:</b> ${order.clientPhone}\n\n` +
