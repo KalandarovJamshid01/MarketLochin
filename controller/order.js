@@ -20,14 +20,14 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
   const result = orders.map((order) => {
     const product = products.find((p) => p.id === order.productId);
     const totalPrice =
-      product?.productDiscPrice && product.productDiscPrice !== 0
+      product?.productDiscPrice && product.productDiscPrice * 1 !== 0
         ? product.productDiscPrice * order.quantity
         : product?.productPrice * order.quantity;
     return {
       productName: product ? product.productName : 'Unknown',
       productModel: product ? product.productModel : 'Unknown',
       productPrice: product
-        ? product.productDiscPrice && product.productDiscPrice !== 0
+        ? product.productDiscPrice && product.productDiscPrice*1 !== 0
           ? product.productDiscPrice
           : product.productPrice
         : 'Unknown',
