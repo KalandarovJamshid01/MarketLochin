@@ -27,7 +27,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
       productName: product ? product.productName : 'Unknown',
       productModel: product ? product.productModel : 'Unknown',
       productPrice: product
-        ? product.productDiscPrice && product.productDiscPrice*1 !== 0
+        ? product.productDiscPrice && product.productDiscPrice * 1 !== 0
           ? product.productDiscPrice
           : product.productPrice
         : 'Unknown',
@@ -52,7 +52,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
         { label: 'Umumiy narx', value: (row) => row.totalPrice },
         { label: 'Mahsulot valyutasi', value: (row) => row.productCurrency },
         { label: 'Xaridor ismi', value: (row) => row.clientName },
-        { label: 'Xaridor raqami', value: (row) => row.clientPhone },
+        { label: 'Xaridor raqami', value: (row) => String(row.clientPhone) },
         { label: 'Izoh', value: (row) => row.comment },
       ],
       content: result,
