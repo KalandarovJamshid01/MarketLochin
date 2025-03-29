@@ -47,7 +47,8 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
         { label: 'Miqdor', value: (row) => row.quantity },
         { label: 'Mahsulot narxi', value: (row) => row.productPrice },
         { label: 'Umumiy narx', value: (row) => row.totalPrice },
-        { label: "Xaridor ma'lumotlari", value: (row) => row.clientName },
+        { label: 'Xaridor ismi', value: (row) => row.clientName },
+        { label: 'Xaridor raqami', value: (row) => row.clienPhone },
         { label: 'Izoh', value: (row) => row.comment },
       ],
       content: result,
@@ -86,7 +87,7 @@ const addOneOrder = catchErrorAsync(async (req, res, next) => {
 
   // **5. Javob qaytarish**
   Send(
-    `<b>Yangi Buyurtma:</b> ${order.id}\n\n` +
+    `\n\n<b>Yangi Buyurtma:</b> ${order.id}\n\n` +
       `1. <b>Xaridor ismi:</b> ${order.clientName}\n\n` +
       `2. <b>Xaridor raqami:</b> ${order.clientPhone}\n\n` +
       `3. <b>Xaridordan izoh:</b> ${order.comment}\n\n`,
