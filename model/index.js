@@ -26,6 +26,7 @@ const firms = require('./firm');
 const currencies = require('./currency');
 const categories = require('./category');
 const sliders = require('./slider');
+const orders = require('./order');
 sequelize
   .authenticate()
   .then(() => {
@@ -51,7 +52,8 @@ db.debts = debts(sequelize, DataTypes);
 db.firms = firms(sequelize, DataTypes);
 db.currencies = currencies(sequelize, DataTypes);
 db.categories = categories(sequelize, DataTypes);
-db.sliders=sliders(sequelize,DataTypes)
+db.sliders = sliders(sequelize, DataTypes);
+db.orders = orders(sequelize, DataTypes);
 
 db.products.belongsTo(db.stores, {
   foreignKey: {
