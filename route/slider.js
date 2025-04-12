@@ -6,9 +6,12 @@ const {
   addAllSliders,
   updateOneSlider,
   deleteOneSlider,
+  getHost,
+  sliderHandler,
 } = require('./../controller/slider');
 
-router.route('/').get(getAllSliders).post(protect, addAllSliders);
+router.route('/').get(getHost, sliderHandler).post(protect, addAllSliders);
+
 router
   .route('/:id')
   .get(getOneSlider)
