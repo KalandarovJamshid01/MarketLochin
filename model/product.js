@@ -40,7 +40,8 @@ module.exports = (sequelize, DataTypes) => {
 
     productDiscPrice: {
       type: DataTypes.DECIMAL(10, 2),
-      defaultValue: 0.0,
+      allowNull: true,
+      defaultValue: null,
     },
   });
   // queryInterface.changeColumn("products", "productCurrency", {
