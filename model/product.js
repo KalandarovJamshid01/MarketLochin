@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 0.0,
     },
     productOption: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     productImgUrl: {
       type: DataTypes.STRING,
