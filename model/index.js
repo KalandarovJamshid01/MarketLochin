@@ -175,7 +175,7 @@ db.categories.hasMany(db.products, {
   allowNull: true,
 });
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   console.log('yes re-sync done!');
 });
 
